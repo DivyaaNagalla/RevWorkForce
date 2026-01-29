@@ -1,0 +1,68 @@
+package com.revworkforce.service;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.revworkforce.dao.LeaveDAO;
+
+public class LeaveService {
+
+    private LeaveDAO dao = new LeaveDAO();
+
+    public void viewLeaveBalance(int empId) {
+        dao.getLeaveBalance(empId);
+    }
+
+    public void applyLeave(int empId,
+                           String type,
+                           String from,
+                           String to,
+                           String reason) throws Exception {
+
+        
+        if (!type.matches("CL|SL|PL")) {
+            throw new Exception("Invalid leave type. Use CL / SL / PL");
+        }
+
+        if (reason == null || reason.trim().isEmpty()) {
+            throw new Exception("Leave reason is required");
+        }
+
+     
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false);
+
+        Date fromDate;
+        Date toDate;
+
+        try {
+            fromDate = sdf.parse(from);
+            toDate = sdf.parse(to);
+        } catch (Exception e) {
+            throw new Exception("Invalid date format. Use YYYY-MM-DD");
+        }
+
+    
+        if (toDate.before(fromDate)) {
+            throw new Exception("To date cannot be before From date");
+        }
+
+      
+        long diffMillis = toDate.getTime() - fromDate.getTime();
+        long days = (diffMillis / (1000 * 60 * 60 * 24)) + 1;
+
+        if (!dao.hasSufficientBalance(empId, type, days)) {
+            throw new Exception("Insufficient leave balance");
+        }
+
+                dao.applyLeave(empId, type, from, to, reason, days);
+    }
+
+    public void viewMyLeaves(int empId) {
+        dao.getMyLeaves(empId);
+    }
+
+    public void viewHolidays() {
+        dao.getHolidays();
+    }
+}

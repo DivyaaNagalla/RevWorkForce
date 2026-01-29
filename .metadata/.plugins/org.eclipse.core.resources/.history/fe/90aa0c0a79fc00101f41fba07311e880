@@ -1,0 +1,46 @@
+package com.revworkforce.dao;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import com.revworkforce.util.DBUtil;
+
+public class EmployeeDAO {
+
+
+    private int getNextEmpId() throws Exception {
+
+        String sql = "SELECT EMP_SEQ.NEXTVAL FROM DUAL";
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return rs.getInt(1);
+    }
+
+ 
+    public int addEmployee(String name,
+                           String email,
+                           String tempPwd) throws Exception {
+
+        int empId = getNextEmpId();
+
+        String sql =
+          "INSERT INTO EMPLOYEE " +
+          "(EMP_ID, NAME, EMAIL, PASSWORD, STATUS, PASSWORD_STATUS) " +
+          "VALUES (?, ?, ?, ?, 'ACTIVE', 'NEW')";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, empId);
+        ps.setString(2, name);
+        ps.setString(3, email);
+        ps.setString(4, tempPwd);
+
+        ps.executeUpdate();
+
+        return empId; 
+    }
+}

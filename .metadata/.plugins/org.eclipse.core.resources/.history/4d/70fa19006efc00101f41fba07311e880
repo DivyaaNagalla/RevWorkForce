@@ -1,0 +1,28 @@
+package com.revworkforce.service;
+
+import com.revworkforce.dao.EmployeeDAO;
+import com.revworkforce.model.Employee;
+
+public class EmployeeService {
+
+    private EmployeeDAO dao = new EmployeeDAO();
+
+    public Employee login(int empId, String password) throws Exception {
+
+        Employee emp = dao.login(empId, password);
+
+        if (emp == null)
+            throw new Exception("Invalid credentials");
+
+        if (!"ACTIVE".equals(emp.getStatus()))
+            throw new Exception("Account inactive");
+
+        return emp;
+    }
+
+    public void changePassword(int empId, String newPwd)
+            throws Exception {
+
+        dao.updatePassword(empId, newPwd);
+    }
+}

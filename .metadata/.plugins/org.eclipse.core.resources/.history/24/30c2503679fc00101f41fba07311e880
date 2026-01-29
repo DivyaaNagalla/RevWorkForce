@@ -1,0 +1,15 @@
+public void updatePassword(int empId, String newPwd) throws Exception {
+
+    String sql =
+        "UPDATE EMPLOYEE " +
+        "SET PASSWORD = ?, PASSWORD_STATUS = 'CHANGED' " +
+        "WHERE EMP_ID = ?";
+
+    PreparedStatement ps =
+        DBUtil.getConnection().prepareStatement(sql);
+
+    ps.setString(1, newPwd);
+    ps.setInt(2, empId);
+
+    ps.executeUpdate();
+}

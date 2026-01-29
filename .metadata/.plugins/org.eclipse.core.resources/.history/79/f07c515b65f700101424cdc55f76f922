@@ -1,0 +1,49 @@
+package com.pkr;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class JDBSDEMO {
+
+    public static void main(String[] args) {
+
+        try {
+            // Load Oracle Driver
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+
+            // Connection details
+            String url = "jdbc:oracle:thin:@localhost:1521:XE";
+            String user = "System";
+            String pass = "12345";
+
+            // Create connection
+            Connection con = DriverManager.getConnection(url, user, pass);
+            System.out.println("Connected");
+
+            // Create statement
+            Statement st = con.createStatement();
+
+            // Execute query
+            ResultSet rs = st.executeQuery("SELECT * FROM EMP");
+
+            while (rs.next()) {
+                System.out.println(
+                    rs.getInt("EMP_ID") + " " +
+                    rs.getString("NAME") + " " +
+                    rs.getInt("SALARY")
+                );
+            }
+
+            // Close resources
+            rs.close();
+            st.close();
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+

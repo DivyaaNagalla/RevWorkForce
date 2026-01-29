@@ -1,0 +1,53 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+import com.revworkforce.service.EmployeeService;
+
+public class AdminMenuUI {
+
+    public static void showMenu() {
+
+        Scanner sc = new Scanner(System.in);
+        EmployeeService service = new EmployeeService();
+
+        while (true) {
+            System.out.println("\n--- Admin Menu ---");
+            System.out.println("1. Add Employee / Manager");
+            System.out.println("2. Assign Manager to Employee");
+            System.out.println("3. Exit");
+            System.out.print("Choose option: ");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+
+                case 1:
+                    AddEmployeeUI.addEmployee();
+                    break;
+
+                case 2:
+                    System.out.print("Employee ID  : ");
+                    int empId = sc.nextInt();
+
+                    System.out.print("Manager ID   : ");
+                    int managerId = sc.nextInt();
+
+                    try {
+                        service.assignManager(empId, managerId);
+                        System.out.println("Manager assigned successfully");
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("Admin logged out");
+                    return;
+
+                default:
+                    System.out.println("Invalid option");
+            }
+        }
+    }
+}

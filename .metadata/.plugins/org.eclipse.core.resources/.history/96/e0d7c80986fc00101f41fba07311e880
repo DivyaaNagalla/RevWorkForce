@@ -1,0 +1,117 @@
+package com.revworkforce.dao;
+
+import java.sql.*;
+import com.revworkforce.util.DBUtil;
+
+public class LeaveDAO {
+
+    public void getLeaveBalance(int empId) {
+        try {
+            String sql =
+              "SELECT LT.LEAVE_NAME, LB.AVAILABLE_DAYS " +
+              "FROM LEAVE_BALANCE LB JOIN LEAVE_TYPE LT " +
+              "ON LB.LEAVE_TYPE_ID = LT.LEAVE_TYPE_ID " +
+              "WHERE LB.EMP_ID=?";
+
+            PreparedStatement ps =
+              DBUtil.getConnection().prepareStatement(sql);
+
+            ps.setInt(1, empId);
+            ResultSet rs = ps.executeQuery();
+
+            System.out.println("\n--- Leave Balance ---");
+            while (rs.next()) {
+                System.out.println(rs.getString(1) + " : " + rs.getInt(2));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public boolean hasSufficientBalance(int empId,
+                                        String type,
+                                        long days) throws Exception {
+
+        String sql =
+          "SELECT AVAILABLE_DAYS FROM LEAVE_BALANCE LB " +
+          "JOIN LEAVE_TYPE LT ON LB.LEAVE_TYPE_ID=LT.LEAVE_TYPE_ID " +
+          "WHERE LB.EMP_ID=? AND LT.LEAVE_NAME=?";
+
+        PreparedStatement ps =
+          DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, empId);
+        ps.setString(2, type);
+
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return rs.getInt(1) >= days;
+    }
+
+    public void applyLeave(int empId,
+                           String type,
+                           String from,
+                           String to,
+                           String reason,
+                           long days) throws Exception {
+
+        String sql =
+          "INSERT INTO LEAVE_APPLICATION " +
+          "(LEAVE_ID, EMP_ID, LEAVE_TYPE_ID, FROM_DATE, TO_DATE, REASON, STATUS) " +
+          "VALUES (LEAVE_APP_SEQ.NEXTVAL, ?, " +
+          "(SELECT LEAVE_TYPE_ID FROM LEAVE_TYPE WHERE LEAVE_NAME=?), ?, ?, ?, 'PENDING')";
+
+        PreparedStatement ps =
+          DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, empId);
+        ps.setString(2, type);
+        ps.setDate(3, Date.valueOf(from));
+        ps.setDate(4, Date.valueOf(to));
+        ps.setString(5, reason);
+
+        ps.executeUpdate();
+    }
+
+    public void getMyLeaves(int empId) {
+        try {
+            String sql =
+              "SELECT LEAVE_ID, STATUS, FROM_DATE, TO_DATE, REASON " +
+              "FROM LEAVE_APPLICATION WHERE EMP_ID=?";
+
+            PreparedStatement ps =
+              DBUtil.getConnection().prepareStatement(sql);
+
+            ps.setInt(1, empId);
+            ResultSet rs = ps.executeQuery();
+
+            System.out.println("\n--- My Leaves ---");
+            while (rs.next()) {
+                System.out.println(
+                    rs.getInt(1) + " | " +
+                    rs.getString(2) + " | " +
+                    rs.getDate(3) + " | " +
+                    rs.getDate(4) + " | " +
+                    rs.getString(5)
+                );
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void getHolidays() {
+        try {
+            Statement st = DBUtil.getConnection().createStatement();
+            ResultSet rs = st.executeQuery(
+              "SELECT HOLIDAY_DATE, HOLIDAY_NAME FROM HOLIDAY");
+
+            System.out.println("\n--- Holiday Calendar ---");
+            while (rs.next()) {
+                System.out.println(rs.getDate(1) + " : " + rs.getString(2));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}

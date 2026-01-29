@@ -1,0 +1,27 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+import com.revworkforce.model.Employee;
+import com.revworkforce.service.EmployeeService;
+
+public class ChangePasswordUI {
+
+    public static void changePassword(Employee emp) {
+
+        Scanner sc = new Scanner(System.in);
+        EmployeeService service = new EmployeeService();
+
+        System.out.print("New Password: ");
+        String p1 = sc.next();
+
+        System.out.print("Confirm Password: ");
+        String p2 = sc.next();
+
+        try {
+            service.changePassword(emp.getEmpId(), p1, p2);
+            System.out.println("Password changed successfully");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}

@@ -1,0 +1,57 @@
+package com.revworkforce.service;
+
+import com.revworkforce.dao.EmployeeDAO;
+import com.revworkforce.model.Employee;
+import com.revworkforce.util.PasswordGenerator;
+
+public class EmployeeService {
+
+    private EmployeeDAO dao = new EmployeeDAO();
+
+    // ===== LOGIN =====
+    public Employee login(int empId, String password) throws Exception {
+
+        Employee emp = dao.login(empId, password);
+
+        if (emp == null) {
+            throw new Exception("Invalid Employee ID or Password");
+        }
+
+        if (!"ACTIVE".equalsIgnoreCase(emp.getStatus())) {
+            throw new Exception("Employee account is inactive");
+        }
+
+        return emp;
+    }
+
+    // ===== CHANGE PASSWORD =====
+    public void changePassword(int empId,
+                               String newPwd,
+                               String confirmPwd) throws Exception {
+
+        if (!newPwd.equals(confirmPwd)) {
+            throw new Exception("Passwords do not match");
+        }
+
+        PasswordValidator.validate(newPwd);
+        dao.updatePassword(empId, newPwd);
+    }
+
+    // ===== ADMIN CREATE EMPLOYEE =====
+    public void addEmployee(String name, String email) throws Exception {
+
+        if (name == null || name.trim().isEmpty())
+            throw new Exception("Name required");
+
+        if (email == null || email.trim().isEmpty())
+            throw new Exception("Email required");
+
+        String tempPwd = PasswordGenerator.generateTempPassword();
+
+        int empId = dao.addEmployee(name, email, tempPwd);
+
+        System.out.println("\n--- Employee Created ---");
+        System.out.println("Employee ID   : " + empId);
+        System.out.println("Temp Password : " + tempPwd);
+    }
+}

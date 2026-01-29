@@ -1,0 +1,44 @@
+package com.revworkforce.model;
+
+public class PerformanceReview {
+
+    private int reviewId;
+    private int empId;
+    private int reviewYear;
+    private String deliverables;
+    private String accomplishments;
+    private String improvements;
+    private int selfRating;
+    private String managerFeedback;
+    private int managerRating;
+    private String status;
+    public int getReviewId() { return reviewId; }
+    public void setReviewId(int reviewId) { this.reviewId = reviewId; }
+
+    public int getEmpId() { return empId; }
+    public void setEmpId(int empId) { this.empId = empId; }
+
+    public int getReviewYear() { return reviewYear; }
+    public void setReviewYear(int reviewYear) { this.reviewYear = reviewYear; }
+
+    public String getDeliverables() { return deliverables; }
+    public void setDeliverables(String deliverables) { this.deliverables = deliverables; }
+
+    public String getAccomplishments() { return accomplishments; }
+    public void setAccomplishments(String accomplishments) { this.accomplishments = accomplishments; }
+
+    public String getImprovements() { return improvements; }
+    public void setImprovements(String improvements) { this.improvements = improvements; }
+
+    public int getSelfRating() { return selfRating; }
+    public void setSelfRating(int selfRating) { this.selfRating = selfRating; }
+
+    public String getManagerFeedback() { return managerFeedback; }
+    public void setManagerFeedback(String managerFeedback) { this.managerFeedback = managerFeedback; }
+
+    public int getManagerRating() { return managerRating; }
+    public void setManagerRating(int managerRating) { this.managerRating = managerRating; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+}

@@ -1,0 +1,29 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+import com.revworkforce.service.EmployeeService;
+
+public class AddEmployeeUI {
+
+    public static void addEmployee() {
+
+        Scanner sc = new Scanner(System.in);
+        EmployeeService service = new EmployeeService();
+
+        System.out.print("Employee Name: ");
+        String name = sc.nextLine();
+
+        System.out.print("Email: ");
+        String email = sc.next();
+
+        System.out.print("Temporary Password: ");
+        String tempPwd = sc.next();
+
+        try {
+            service.addEmployee(name, email, tempPwd);
+            System.out.println("Employee created successfully");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}

@@ -1,0 +1,84 @@
+package com.revworkforce.dao;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import com.revworkforce.model.Employee;
+import com.revworkforce.util.DBUtil;
+
+public class EmployeeDAO {
+
+    public Employee login(int empId, String password) throws Exception {
+
+        String sql =
+            "SELECT EMP_ID, NAME, EMAIL, STATUS, PASSWORD_STATUS " +
+            "FROM EMPLOYEE WHERE EMP_ID = ? AND PASSWORD = ?";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, empId);
+        ps.setString(2, password);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            Employee emp = new Employee();
+            emp.setEmpId(rs.getInt("EMP_ID"));
+            emp.setName(rs.getString("NAME"));
+            emp.setEmail(rs.getString("EMAIL"));
+            emp.setStatus(rs.getString("STATUS"));
+            emp.setPasswordStatus(rs.getString("PASSWORD_STATUS"));
+            return emp;
+        }
+        return null;
+    }
+
+    // ================= UPDATE PASSWORD =================
+    public void updatePassword(int empId, String newPwd) throws Exception {
+
+        String sql =
+            "UPDATE EMPLOYEE " +
+            "SET PASSWORD = ?, PASSWORD_STATUS = 'CHANGED' " +
+            "WHERE EMP_ID = ?";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setString(1, newPwd);
+        ps.setInt(2, empId);
+
+        ps.executeUpdate();
+    }
+
+    
+    public int addEmployee(String name,
+                           String email,
+                           String tempPwd) throws Exception {
+
+        String seqSql = "SELECT EMP_SEQ.NEXTVAL FROM DUAL";
+        PreparedStatement seqPs =
+            DBUtil.getConnection().prepareStatement(seqSql);
+
+        ResultSet rs = seqPs.executeQuery();
+        rs.next();
+        int empId = rs.getInt(1);
+
+        String sql =
+            "INSERT INTO EMPLOYEE " +
+            "(EMP_ID, NAME, EMAIL, PASSWORD, STATUS, PASSWORD_STATUS) " +
+            "VALUES (?, ?, ?, ?, 'ACTIVE', 'NEW')";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, empId);
+        ps.setString(2, name);
+        ps.setString(3, email);
+        ps.setString(4, tempPwd);
+
+        ps.executeUpdate();
+
+        return empId; 
+    }
+}

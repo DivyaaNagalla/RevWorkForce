@@ -1,0 +1,28 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+import com.revworkforce.model.Employee;
+import com.revworkforce.service.EmployeeService;
+
+public class LoginUI {
+
+    public static Employee login() {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Employee ID: ");
+        int empId = sc.nextInt();
+
+        System.out.print("Password: ");
+        String pwd = sc.next();
+
+        EmployeeService service = new EmployeeService();
+
+        try {
+            return service.login(empId, pwd);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+}

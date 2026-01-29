@@ -1,0 +1,24 @@
+package com.revworkforce.util;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class DBUtil {
+
+    private static Connection con;
+
+    public static Connection getConnection() throws Exception {
+
+        if (con == null || con.isClosed()) {
+
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+
+            con = DriverManager.getConnection(
+                "jdbc:oracle:thin:@localhost:1521:XE",
+                "revworkfoce",
+                "admin"
+            );
+        }
+        return con;
+    }
+}

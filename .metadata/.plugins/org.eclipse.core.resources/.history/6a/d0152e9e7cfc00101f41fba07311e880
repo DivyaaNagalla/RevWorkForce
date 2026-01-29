@@ -1,0 +1,26 @@
+package com.revworkforce.service;
+
+public class PasswordValidator {
+
+    public static void validate(String pwd) throws Exception {
+
+        if (pwd.length() < 8)
+            throw new Exception("Min 8 characters");
+
+        boolean u=false,l=false,d=false,s=false;
+
+        for (char c : pwd.toCharArray()) {
+            if (Character.isUpperCase(c)) u=true;
+            else if (Character.isLowerCase(c)) l=true;
+            else if (Character.isDigit(c)) d=true;
+            else s=true;
+        }
+
+        if (!u) throw new Exception("Need uppercase");
+        if (!l) throw new Exception("Need lowercase");
+        if (!d) throw new Exception("Need digit");
+        if (!s) throw new Exception("Need special char");
+    }
+}
+
+
