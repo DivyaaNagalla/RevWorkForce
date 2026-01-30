@@ -1,80 +1,74 @@
 package com.revworkforce.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.revworkforce.dao.PerformanceDAO;
 
 public class PerformanceService {
 
-    private PerformanceDAO dao = new PerformanceDAO();
+    private static final Logger logger =
+            LoggerFactory.getLogger(PerformanceService.class);
 
-    public int submitReview(int empId,
-                            int reviewYear,
-                            String deliverables,
-                            String accomplishments,
-                            String improvements,
-                            int selfRating) throws Exception {
+    private PerformanceDAO dao;
+    public PerformanceService() {
+        this.dao = new PerformanceDAO();
+        logger.info("PerformanceService initialized using default constructor");
+    }
+    public PerformanceService(PerformanceDAO dao) {
+        this.dao = dao;
+        logger.info("PerformanceService initialized using injected PerformanceDAO");
+    }
+    public void createReview(int empId,
+                             int year,
+                             String deliverables,
+                             String achievements,
+                             String improvements,
+                             int rating) throws Exception {
 
-        if (selfRating < 1 || selfRating > 5) {
+        logger.info("Create performance review request: empId={}, year={}, rating={}",
+                empId, year, rating);
+
+        if (rating < 1 || rating > 5) {
+            logger.warn("Invalid rating {} for empId={} (must be 1–5)", rating, empId);
             throw new Exception("Rating must be between 1 and 5");
         }
 
-        if (deliverables == null || deliverables.trim().isEmpty())
-            throw new Exception("Deliverables required");
-
-        if (accomplishments == null || accomplishments.trim().isEmpty())
-            throw new Exception("Accomplishments required");
-
-        if (improvements == null || improvements.trim().isEmpty())
-            throw new Exception("Improvements required");
-
-        return dao.createReview(
-                empId,
-                reviewYear,
-                deliverables,
-                accomplishments,
-                improvements,
-                selfRating
-        );
+        try {
+            dao.createReview(empId, year, deliverables, achievements, improvements, rating);
+            logger.info("Performance review created successfully for empId={}", empId);
+        } catch (Exception e) {
+            logger.error("Failed to create performance review for empId={}", empId, e);
+            throw e;
+        }
     }
-
-    public void addGoal(int reviewId,
-                        String description,
-                        String priority,
-                        String metric) throws Exception {
-
-        if (!priority.matches("HIGH|MEDIUM|LOW"))
-            throw new Exception("Invalid priority");
-
-        dao.addGoal(reviewId, description, priority, metric);
-    }
-
-    public void updateGoalProgress(int goalId, int progress) throws Exception {
-
-        if (progress < 0 || progress > 100)
-            throw new Exception("Invalid progress");
-
-        dao.updateGoalProgress(goalId, progress);
-    }
-
-    public void giveFeedback(int reviewId,
-                             String feedback,
-                             int rating,
-                             int empId) throws Exception {
-
-        if (rating < 1 || rating > 5)
-            throw new Exception("Invalid rating");
-
-        dao.giveManagerFeedback(reviewId, feedback, rating, empId);
+    public void viewMyReviews(int empId) throws Exception {
+        logger.info("View my performance reviews request for empId={}", empId);
+        dao.viewMyReviews(empId);
     }
 
     public void viewTeamReviews(int managerId) throws Exception {
+        logger.info("View team performance reviews request for managerId={}", managerId);
         dao.viewTeamReviews(managerId);
     }
 
-    public void viewEmployeeGoals(int reviewId) throws Exception {
-        dao.viewEmployeeGoals(reviewId);
-    }
+    public void giveManagerFeedback(int reviewId,
+                                    int rating,
+                                    String feedback) throws Exception {
 
-    public void viewTeamPerformanceSummary(int managerId) throws Exception {
-        dao.teamPerformanceSummary(managerId);
+        logger.info("Manager feedback request: reviewId={}, rating={}", reviewId, rating);
+
+        if (rating < 1 || rating > 5) {
+            logger.warn("Invalid manager rating {} for reviewId={}", rating, reviewId);
+            throw new Exception("Rating must be between 1 and 5");
+        }
+
+        try {
+            dao.giveManagerFeedback(reviewId, rating, feedback);
+            logger.info("Manager feedback submitted successfully for reviewId={}", reviewId);
+        } catch (Exception e) {
+            logger.error("Failed to submit manager feedback for reviewId={}", reviewId, e);
+            throw e;
+        }
     }
 }

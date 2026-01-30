@@ -1,35 +1,55 @@
 package com.revworkforce.ui;
 
-import java.io.Console;
 import java.util.Scanner;
+
 import com.revworkforce.model.Employee;
 import com.revworkforce.service.EmployeeService;
 
 public class LoginUI {
 
-    public static Employee login() {
+public static Employee login() {
 
-        Scanner sc = new Scanner(System.in);
-        EmployeeService service = new EmployeeService();
+    Scanner sc = new Scanner(System.in);
+    EmployeeService service = new EmployeeService();
 
-        System.out.print("Enter Employee ID: ");
-        int empId = sc.nextInt();
+    System.out.print("Enter Employee ID: ");
+    int empId = sc.nextInt();
+    sc.nextLine();
 
-        Console console = System.console();
-        String password;
+    System.out.print("Enter Password: ");
+    String pwd = sc.nextLine();
 
-        if (console != null) {
-            password = new String(console.readPassword("Enter Password: "));
-        } else {
-            System.out.print("Enter Password: ");
-            password = sc.next();
+    try {
+        Employee emp = service.login(empId, pwd);
+
+        if ("Y".equalsIgnoreCase(emp.getFirstLogin())) {
+            System.out.println("First time login – change password required");
+
+            for (int i = 1; i <= 3; i++) {
+                System.out.println("Attempt " + i + "/3");
+
+                System.out.print("New Password: ");
+                String newPwd = sc.nextLine();
+
+                System.out.print("Confirm Password: ");
+                String confirmPwd = sc.nextLine();
+
+                try {
+                    service.changePassword(emp.getEmpId(), newPwd, confirmPwd);
+                    break;
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    if (i == 3) return null;
+                }
+            }
         }
 
-        try {
-            return service.login(empId, password);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+        return emp;
+
+    } catch (Exception e) {
+        System.out.println(e.getMessage());
+        return null;
     }
 }
+}
+

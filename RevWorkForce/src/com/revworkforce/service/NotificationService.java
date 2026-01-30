@@ -1,0 +1,44 @@
+package com.revworkforce.service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.revworkforce.dao.NotificationDAO;
+
+public class NotificationService {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(NotificationService.class);
+
+    private NotificationDAO dao;
+    public NotificationService() {
+        this.dao = new NotificationDAO();
+        logger.info("NotificationService initialized using default constructor");
+    }
+    public NotificationService(NotificationDAO dao) {
+        this.dao = dao;
+        logger.info("NotificationService initialized using injected NotificationDAO");
+    }
+
+    public void notifyEmployee(int empId, String message) throws Exception {
+        logger.info("Notify employee request: empId={}", empId);
+        try {
+            dao.addNotification(empId, message);
+            logger.info("Notification added successfully for empId={}", empId);
+        } catch (Exception e) {
+            logger.error("Failed to notify employee empId={}", empId, e);
+            throw e;
+        }
+    }
+
+    public void showUnreadOnLogin(int empId) throws Exception {
+        logger.info("Show unread notifications on login for empId={}", empId);
+        try {
+            dao.showUnreadNotifications(empId);
+            logger.info("Unread notifications displayed for empId={}", empId);
+        } catch (Exception e) {
+            logger.error("Failed to show unread notifications for empId={}", empId, e);
+            throw e;
+        }
+    }
+}

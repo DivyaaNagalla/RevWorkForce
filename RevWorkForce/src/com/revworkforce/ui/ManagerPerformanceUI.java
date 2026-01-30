@@ -14,58 +14,45 @@ public class ManagerPerformanceUI {
         while (true) {
             System.out.println("\n--- Manager Performance Menu ---");
             System.out.println("1. View Team Reviews");
-            System.out.println("2. View Employee Goals");
-            System.out.println("3. Give Feedback & Rating");
-            System.out.println("4. Team Performance Summary");
-            System.out.println("5. Back");
+            System.out.println("2. Give Feedback & Rating");
+            System.out.println("3. Back");
+            System.out.print("Choose option: ");
 
-            int ch = sc.nextInt();
+            int choice = sc.nextInt();
             sc.nextLine();
 
             try {
-                switch (ch) {
+                switch (choice) {
 
                     case 1:
                         service.viewTeamReviews(manager.getEmpId());
                         break;
 
                     case 2:
-                        System.out.print("Review ID: ");
-                        int rid = sc.nextInt();
-                        service.viewEmployeeGoals(rid);
+                        System.out.print("Enter Review ID: ");
+                        int reviewId = sc.nextInt();
+                        sc.nextLine();
+
+                        System.out.print("Manager Rating (1-5): ");
+                        int rating = sc.nextInt();
+                        sc.nextLine();
+
+                        System.out.print("Manager Feedback: ");
+                        String fb = sc.nextLine();
+
+                        service.giveManagerFeedback(reviewId, rating, fb);
                         break;
 
                     case 3:
-                        System.out.print("Review ID: ");
-                        int reviewId = sc.nextInt();
-
-                        System.out.print("Employee ID: ");
-                        int empId = sc.nextInt();
-
-                        sc.nextLine();
-                        System.out.print("Feedback: ");
-                        String feedback = sc.nextLine();
-
-                        System.out.print("Rating (1-5): ");
-                        int rating = sc.nextInt();
-
-                        service.giveFeedback(
-                            reviewId, feedback, rating, empId);
-
-                        System.out.println("Feedback submitted");
-                        break;
-
-                    case 4:
-                        service.viewTeamPerformanceSummary(manager.getEmpId());
-                        break;
-
-                    case 5:
                         return;
+
+                    default:
+                        System.out.println("Invalid option");
                 }
+
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
 }
-

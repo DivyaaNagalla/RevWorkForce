@@ -1,7 +1,6 @@
 package com.revworkforce.ui;
 
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 import com.revworkforce.model.Employee;
@@ -16,19 +15,19 @@ public class EmployeeLeaveUI {
 
         while (true) {
 
-            System.out.println("\n--- Employee Leave Menu ---");
+            System.out.println("\n--- Leave Management ---");
             System.out.println("1. View Leave Balance");
             System.out.println("2. Apply Leave");
             System.out.println("3. View My Leaves");
             System.out.println("4. View Holidays");
-            System.out.println("5. Back");
+            System.out.println("5. Cancel Leave");
+            System.out.println("6. Back");
             System.out.print("Choose option: ");
 
             int ch = sc.nextInt();
             sc.nextLine();
 
             try {
-
                 switch (ch) {
 
                     case 1:
@@ -36,43 +35,20 @@ public class EmployeeLeaveUI {
                         break;
 
                     case 2:
-                        System.out.print("Leave Type ID (1=CL,2=SL,3=PL): ");
-                        int typeId = sc.nextInt();
+                        System.out.print("Leave Type ID: ");
+                        int lt = sc.nextInt();
                         sc.nextLine();
 
-                        SimpleDateFormat sdf =
-                            new SimpleDateFormat("yyyy-MM-dd");
+                        System.out.print("Start Date (yyyy-mm-dd): ");
+                        Date s = Date.valueOf(sc.nextLine());
 
-                        System.out.print("From Date (yyyy-MM-dd): ");
-                        java.util.Date utilFrom =
-                            sdf.parse(sc.nextLine());
-
-                        System.out.print("To Date (yyyy-MM-dd): ");
-                        java.util.Date utilTo =
-                            sdf.parse(sc.nextLine());
-
-                        Date fromDate =
-                            new Date(utilFrom.getTime());
-                        Date toDate =
-                            new Date(utilTo.getTime());
+                        System.out.print("End Date (yyyy-mm-dd): ");
+                        Date e = Date.valueOf(sc.nextLine());
 
                         System.out.print("Reason: ");
-                        String reason = sc.nextLine();
+                        String r = sc.nextLine();
 
-                        int days =
-                            (int)((toDate.getTime() - fromDate.getTime())
-                            / (1000 * 60 * 60 * 24)) + 1;
-
-                        service.applyLeave(
-                                emp.getEmpId(),
-                                typeId,
-                                fromDate,
-                                toDate,
-                                reason,
-                                days
-                        );
-
-                        System.out.println("Leave applied successfully");
+                        service.applyLeave(emp.getEmpId(), lt, s, e, r);
                         break;
 
                     case 3:
@@ -84,14 +60,20 @@ public class EmployeeLeaveUI {
                         break;
 
                     case 5:
+                        System.out.print("Leave ID: ");
+                        int lid = sc.nextInt();
+                        service.cancelLeave(lid, emp.getEmpId());
+                        break;
+
+                    case 6:
                         return;
 
                     default:
                         System.out.println("Invalid option");
                 }
 
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            } catch (Exception ex) {
+                System.out.println("Error: " + ex.getMessage());
             }
         }
     }

@@ -1,59 +1,91 @@
 package com.revworkforce.service;
 
 import java.sql.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.revworkforce.dao.LeaveDAO;
 
 public class LeaveService {
 
-    private LeaveDAO dao = new LeaveDAO();
+    private static final Logger logger =
+            LoggerFactory.getLogger(LeaveService.class);
+
+    private LeaveDAO dao;
+
+    public LeaveService() {
+        this.dao = new LeaveDAO();
+        logger.info("LeaveService initialized using default constructor");
+    }
+    public LeaveService(LeaveDAO dao) {
+        this.dao = dao;
+        logger.info("LeaveService initialized using injected LeaveDAO");
+    }
+
+
+    public void viewLeaveBalance(int empId) throws Exception {
+        logger.info("View leave balance request for empId={}", empId);
+        dao.viewLeaveBalance(empId);
+    }
 
     public void applyLeave(int empId,
                            int leaveTypeId,
-                           Date fromDate,
-                           Date toDate,
-                           String reason,
-                           int days) throws Exception {
+                           Date start,
+                           Date end,
+                           String reason) throws Exception {
 
-        if (fromDate.after(toDate)) {
-            throw new Exception("From date cannot be after To date");
+        logger.info("Apply leave request: empId={}, typeId={}, start={}, end={}",
+                empId, leaveTypeId, start, end);
+
+        if (end.before(start)) {
+            logger.warn("Invalid leave dates for empId={} : endDate < startDate", empId);
+            throw new Exception("End date cannot be before start date");
         }
 
-        dao.applyLeave(empId, leaveTypeId, fromDate, toDate, reason, days);
+        try {
+            dao.applyLeave(empId, leaveTypeId, start, end, reason);
+            logger.info("Leave applied successfully for empId={}", empId);
+        } catch (Exception e) {
+            logger.error("Failed to apply leave for empId={}", empId, e);
+            throw e;
+        }
     }
 
-    public void viewLeaveBalance(int empId) throws Exception {
-        dao.getLeaveBalance(empId);
-    }
 
     public void viewMyLeaves(int empId) throws Exception {
-        dao.getMyLeaves(empId);
+        logger.info("View my leaves request for empId={}", empId);
+        dao.viewMyLeaves(empId);
     }
-
     public void viewHolidays() throws Exception {
-        dao.getHolidays();
+        logger.info("View holidays request");
+        dao.viewHolidays();
     }
-
-    public void viewMyTeam(int managerId) throws Exception {
-        dao.getTeamMembers(managerId);
+    public void cancelLeave(int leaveId, int empId) throws Exception {
+        logger.info("Cancel leave request: leaveId={}, empId={}", leaveId, empId);
+        try {
+            dao.cancelLeave(leaveId, empId);
+            logger.info("Leave cancelled successfully: leaveId={}", leaveId);
+        } catch (Exception e) {
+            logger.error("Failed to cancel leave: leaveId={}", leaveId, e);
+            throw e;
+        }
     }
 
     public void viewTeamLeaveRequests(int managerId) throws Exception {
-        dao.getTeamLeaveRequests(managerId);
+        logger.info("View team leave requests for managerId={}", managerId);
+        dao.viewTeamLeaveRequests(managerId);
     }
 
-    public void approveOrRejectLeave(int leaveId,
-                                     String status,
-                                     String comment,
-                                     int empId) throws Exception {
-
-        if (!status.equals("APPROVED") && !status.equals("REJECTED")) {
-            throw new Exception("Invalid status");
-        }
-
-        dao.updateLeaveStatus(leaveId, status, comment, empId);
+    public void approveLeave(int leaveId, String comment) throws Exception {
+        logger.info("Approve leave request: leaveId={}", leaveId);
+        dao.approveOrRejectLeave(leaveId, "APPROVED", comment);
+        logger.info("Leave approved successfully: leaveId={}", leaveId);
     }
 
-    public void viewTeamCalendar(int managerId) throws Exception {
-        dao.getTeamLeaveCalendar(managerId);
+    public void rejectLeave(int leaveId, String comment) throws Exception {
+        logger.info("Reject leave request: leaveId={}", leaveId);
+        dao.approveOrRejectLeave(leaveId, "REJECTED", comment);
+        logger.info("Leave rejected successfully: leaveId={}", leaveId);
     }
 }

@@ -1,0 +1,257 @@
+2026-01-30 17:17:50 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor
+2026-01-30 17:18:47 INFO  com.revworkforce.service.EmployeeService - Add employee request: name=king, email=king@gmail.com
+2026-01-30 17:18:48 INFO  com.revworkforce.service.EmployeeService - Employee created successfully empId=1030, tempPwdGenerated=true
+2026-01-30 18:19:46 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor
+2026-01-30 18:20:08 INFO  com.revworkforce.service.EmployeeService - Add employee request: name=Surya, email=surya2@gmail.com
+2026-01-30 18:20:08 INFO  com.revworkforce.service.EmployeeService - Employee created successfully empId=1041, tempPwdGenerated=true
+2026-01-30 18:20:39 INFO  com.revworkforce.service.EmployeeService - Assigning managerId=1012 to empId=1021
+2026-01-30 18:20:39 INFO  com.revworkforce.service.EmployeeService - Manager assigned successfully for empId=1021
+2026-01-30 18:20:44 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor
+2026-01-30 18:40:14 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor
+2026-01-30 18:40:33 INFO  com.revworkforce.service.EmployeeService - Add employee request: name=shanu, email=shanu2@gmail.com
+2026-01-30 18:40:34 INFO  com.revworkforce.service.EmployeeService - Employee created successfully empId=1042, tempPwdGenerated=true
+2026-01-30 18:41:18 INFO  com.revworkforce.service.EmployeeService - Add employee request: name=prani, email=prani4@gmail.com
+2026-01-30 18:41:18 INFO  com.revworkforce.service.EmployeeService - Employee created successfully empId=1043, tempPwdGenerated=true
+2026-01-30 18:41:32 INFO  com.revworkforce.service.EmployeeService - Assigning managerId=1012 to empId=1042
+2026-01-30 18:41:32 INFO  com.revworkforce.service.EmployeeService - Manager assigned successfully for empId=1042
+2026-01-30 18:41:46 INFO  com.revworkforce.service.EmployeeService - Assigning managerId=1024 to empId=1043
+2026-01-30 18:41:46 INFO  com.revworkforce.service.EmployeeService - Manager assigned successfully for empId=1043
+2026-01-30 18:41:50 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor
+2026-01-30 18:42:08 INFO  com.revworkforce.service.EmployeeService - Login attempt for empId=1042
+2026-01-30 18:42:08 INFO  com.revworkforce.service.EmployeeService - Login successful for empId=1042
+2026-01-30 18:42:18 INFO  com.revworkforce.service.EmployeeService - Password change request for empId=1042
+2026-01-30 18:42:18 INFO  com.revworkforce.service.EmployeeService - Password changed successfully for empId=1042
+2026-01-30 18:42:18 INFO  com.revworkforce.service.NotificationService - NotificationService initialized using default constructor
+2026-01-30 18:42:18 INFO  com.revworkforce.service.NotificationService - Show unread notifications on login for empId=1042
+2026-01-30 18:42:18 INFO  com.revworkforce.service.NotificationService - Unread notifications displayed for empId=1042
+2026-01-30 18:42:18 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor
+2026-01-30 18:42:23 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor
+2026-01-30 18:42:41 INFO  com.revworkforce.service.EmployeeService - Update profile request for empId=1042
+2026-01-30 18:42:41 INFO  com.revworkforce.service.EmployeeService - Profile updated successfully for empId=1042
+2026-01-30 18:43:05 INFO  com.revworkforce.service.EmployeeService - Update profile request for empId=1042
+2026-01-30 18:43:05 INFO  com.revworkforce.service.EmployeeService - Profile updated successfully for empId=1042
+2026-01-30 18:43:45 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using default constructor
+2026-01-30 18:43:46 INFO  com.revworkforce.service.LeaveService - View leave balance request for empId=1042
+2026-01-30 18:44:08 INFO  com.revworkforce.service.LeaveService - Apply leave request: empId=1042, typeId=1, start=2026-02-02, end=2026-02-05
+2026-01-30 18:44:08 INFO  com.revworkforce.service.LeaveService - Leave applied successfully for empId=1042
+2026-01-30 18:44:13 INFO  com.revworkforce.service.LeaveService - View my leaves request for empId=1042
+2026-01-30 18:44:16 INFO  com.revworkforce.service.LeaveService - View holidays request
+2026-01-30 18:44:22 INFO  com.revworkforce.service.PerformanceService - PerformanceService initialized using default constructor
+2026-01-30 18:44:42 INFO  com.revworkforce.service.PerformanceService - Create performance review request: empId=1042, year=2026, rating=4
+2026-01-30 18:44:42 INFO  com.revworkforce.service.PerformanceService - Performance review created successfully for empId=1042
+2026-01-30 18:44:47 INFO  com.revworkforce.service.PerformanceService - View my performance reviews request for empId=1042
+2026-01-30 18:44:54 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor
+2026-01-30 18:44:55 INFO  com.revworkforce.service.EmployeeService - View upcoming birthdays request
+2026-01-30 18:45:05 INFO  com.revworkforce.service.EmployeeService - View work anniversaries request
+2026-01-30 18:45:10 INFO  com.revworkforce.service.EmployeeService - View employee directory request
+2026-01-30 18:45:19 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using default constructor
+2026-01-30 18:45:20 INFO  com.revworkforce.service.LeaveService - View team leave requests for managerId=1042
+2026-01-30 18:45:48 INFO  com.revworkforce.service.LeaveService - Approve leave request: leaveId=10021
+2026-01-30 18:45:48 INFO  com.revworkforce.service.LeaveService - Leave approved successfully: leaveId=10021
+2026-01-30 18:45:53 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using default constructor
+2026-01-30 18:45:55 INFO  com.revworkforce.service.LeaveService - View my leaves request for empId=1042
+2026-01-30 20:02:36 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor
+2026-01-30 20:02:59 INFO  com.revworkforce.service.EmployeeService - Add employee request: name=Uma, email=uma12@gmail.com
+2026-01-30 20:03:00 INFO  com.revworkforce.service.EmployeeService - Employee created successfully empId=1044
+2026-01-30 20:03:11 INFO  com.revworkforce.service.EmployeeService - Assigning managerId=1032 to empId=1044
+2026-01-30 20:50:43 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor
+2026-01-30 20:51:00 INFO  com.revworkforce.service.EmployeeService - Add employee request: name=Shyam, email=shyam@gmail.com
+2026-01-30 20:51:00 INFO  com.revworkforce.service.EmployeeService - Employee created successfully empId=1045
+2026-01-30 20:51:30 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor
+2026-01-30 20:51:41 INFO  com.revworkforce.service.EmployeeService - Login attempt for empId=1045
+2026-01-30 20:51:41 INFO  com.revworkforce.service.EmployeeService - Login successful for empId=1045
+2026-01-30 20:51:55 INFO  com.revworkforce.service.EmployeeService - Password change request for empId=1045
+2026-01-30 20:51:55 INFO  com.revworkforce.service.EmployeeService - Password changed successfully for empId=1045
+2026-01-30 20:51:55 INFO  com.revworkforce.service.NotificationService - NotificationService initialized using default constructor
+2026-01-30 20:51:55 INFO  com.revworkforce.service.NotificationService - Show unread notifications on login for empId=1045
+2026-01-30 20:51:55 INFO  com.revworkforce.service.NotificationService - Unread notifications displayed for empId=1045
+2026-01-30 20:51:55 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor
+2026-01-30 20:51:59 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor
+2026-01-30 20:52:08 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using default constructor
+2026-01-30 20:52:08 INFO  com.revworkforce.service.LeaveService - View leave balance request for empId=1045
+2026-01-30 20:52:10 INFO  com.revworkforce.service.LeaveService - View holidays request
+2026-01-30 20:52:25 INFO  com.revworkforce.service.AdminConfigService - AdminConfigService initialized using injected AdminConfigDAO
+2026-01-30 20:52:25 INFO  com.revworkforce.service.AdminConfigService - Request received to add department: Engineering
+2026-01-30 20:52:26 INFO  com.revworkforce.service.AdminConfigService - Department added successfully: Engineering
+2026-01-30 20:52:26 INFO  com.revworkforce.service.AdminConfigService - AdminConfigService initialized using injected AdminConfigDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.AdminConfigService - Request received to add designation: Software Engineer
+2026-01-30 20:52:26 INFO  com.revworkforce.service.AdminConfigService - Designation added successfully: Software Engineer
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Forgot password request for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Update profile request for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Password change request for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Password change request for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Update profile request for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Profile updated successfully for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Password change request for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Password changed successfully for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Login attempt for empId=101
+2026-01-30 20:52:26 WARN  com.revworkforce.service.EmployeeService - Login failed for empId=101 : invalid credentials
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Login attempt for empId=101
+2026-01-30 20:52:26 WARN  com.revworkforce.service.EmployeeService - Login blocked for empId=101 : account inactive
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Forgot password request for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Password reset successful for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Login attempt for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Login successful for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Add employee request: name=Divya, email=divya@gmail.com
+2026-01-30 20:52:26 INFO  com.revworkforce.service.EmployeeService - Employee created successfully empId=201
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveAdminService - LeaveAdminService initialized using injected LeaveAdminDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveAdminService - Adjust leave balance: empId=101, typeId=1, balance=8
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveAdminService - Leave balance adjusted successfully for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveAdminService - LeaveAdminService initialized using injected LeaveAdminDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveAdminService - Add leave type request: name=Casual Leave, quota=12
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveAdminService - Leave type added successfully: name=Casual Leave
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveAdminService - LeaveAdminService initialized using injected LeaveAdminDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveAdminService - Assign leave quota: empId=101, typeId=1, days=10
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveAdminService - Leave quota assigned successfully for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.NotificationService - NotificationService initialized using injected NotificationDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.NotificationService - Show unread notifications on login for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.NotificationService - Unread notifications displayed for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.NotificationService - NotificationService initialized using injected NotificationDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.NotificationService - Notify employee request: empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.NotificationService - Notification added successfully for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - PerformanceService initialized using injected PerformanceDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - Create performance review request: empId=101, year=2025, rating=0
+2026-01-30 20:52:26 WARN  com.revworkforce.service.PerformanceService - Invalid rating 0 for empId=101 (must be 1–5)
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - PerformanceService initialized using injected PerformanceDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - Manager feedback request: reviewId=301, rating=5
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - Manager feedback submitted successfully for reviewId=301
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - PerformanceService initialized using injected PerformanceDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - Create performance review request: empId=101, year=2025, rating=6
+2026-01-30 20:52:26 WARN  com.revworkforce.service.PerformanceService - Invalid rating 6 for empId=101 (must be 1–5)
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - PerformanceService initialized using injected PerformanceDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - Manager feedback request: reviewId=301, rating=7
+2026-01-30 20:52:26 WARN  com.revworkforce.service.PerformanceService - Invalid manager rating 7 for reviewId=301
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - PerformanceService initialized using injected PerformanceDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - View team performance reviews request for managerId=201
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - PerformanceService initialized using injected PerformanceDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - View my performance reviews request for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - PerformanceService initialized using injected PerformanceDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - Create performance review request: empId=101, year=2025, rating=4
+2026-01-30 20:52:26 INFO  com.revworkforce.service.PerformanceService - Performance review created successfully for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - View leave balance request for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - Reject leave request: leaveId=401
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - Leave rejected successfully: leaveId=401
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - View holidays request
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - View my leaves request for empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - Cancel leave request: leaveId=201, empId=101
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - Leave cancelled successfully: leaveId=201
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - Approve leave request: leaveId=401
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - Leave approved successfully: leaveId=401
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - Apply leave request: empId=101, typeId=1, start=2025-02-10, end=2025-02-05
+2026-01-30 20:52:26 WARN  com.revworkforce.service.LeaveService - Invalid leave dates for empId=101 : endDate < startDate
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - View team leave requests for managerId=301
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - Apply leave request: empId=101, typeId=1, start=2025-02-01, end=2025-02-05
+2026-01-30 20:52:26 INFO  com.revworkforce.service.LeaveService - Leave applied successfully for empId=101
+2026-01-30 22:57:02 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor
+2026-01-30 23:14:35 INFO  com.revworkforce.service.AdminConfigService - AdminConfigService initialized using injected AdminConfigDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.AdminConfigService - Request received to add department: Engineering
+2026-01-30 23:14:35 INFO  com.revworkforce.service.AdminConfigService - Department added successfully: Engineering
+2026-01-30 23:14:35 INFO  com.revworkforce.service.AdminConfigService - AdminConfigService initialized using injected AdminConfigDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.AdminConfigService - Request received to add designation: Software Engineer
+2026-01-30 23:14:35 INFO  com.revworkforce.service.AdminConfigService - Designation added successfully: Software Engineer
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Update profile request for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Forgot password request for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Login attempt for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Login successful for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Add employee request: name=Divya, email=divya@gmail.com
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Employee created successfully empId=201
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Login attempt for empId=101
+2026-01-30 23:14:35 WARN  com.revworkforce.service.EmployeeService - Login failed for empId=101 : invalid credentials
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Login attempt for empId=101
+2026-01-30 23:14:35 WARN  com.revworkforce.service.EmployeeService - Login blocked for empId=101 : account inactive
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Password change request for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Password change request for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Update profile request for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Profile updated successfully for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Password change request for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Password changed successfully for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using injected EmployeeDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Forgot password request for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.EmployeeService - Password reset successful for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveAdminService - LeaveAdminService initialized using injected LeaveAdminDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveAdminService - Adjust leave balance: empId=101, typeId=1, balance=8
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveAdminService - Leave balance adjusted successfully for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveAdminService - LeaveAdminService initialized using injected LeaveAdminDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveAdminService - Assign leave quota: empId=101, typeId=1, days=10
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveAdminService - Leave quota assigned successfully for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveAdminService - LeaveAdminService initialized using injected LeaveAdminDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveAdminService - Add leave type request: name=Casual Leave, quota=12
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveAdminService - Leave type added successfully: name=Casual Leave
+2026-01-30 23:14:35 INFO  com.revworkforce.service.NotificationService - NotificationService initialized using injected NotificationDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.NotificationService - Show unread notifications on login for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.NotificationService - Unread notifications displayed for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.NotificationService - NotificationService initialized using injected NotificationDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.NotificationService - Notify employee request: empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.NotificationService - Notification added successfully for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - PerformanceService initialized using injected PerformanceDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - Manager feedback request: reviewId=301, rating=5
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - Manager feedback submitted successfully for reviewId=301
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - PerformanceService initialized using injected PerformanceDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - Manager feedback request: reviewId=301, rating=7
+2026-01-30 23:14:35 WARN  com.revworkforce.service.PerformanceService - Invalid manager rating 7 for reviewId=301
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - PerformanceService initialized using injected PerformanceDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - Create performance review request: empId=101, year=2025, rating=6
+2026-01-30 23:14:35 WARN  com.revworkforce.service.PerformanceService - Invalid rating 6 for empId=101 (must be 1–5)
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - PerformanceService initialized using injected PerformanceDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - Create performance review request: empId=101, year=2025, rating=0
+2026-01-30 23:14:35 WARN  com.revworkforce.service.PerformanceService - Invalid rating 0 for empId=101 (must be 1–5)
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - PerformanceService initialized using injected PerformanceDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - View team performance reviews request for managerId=201
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - PerformanceService initialized using injected PerformanceDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - View my performance reviews request for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - PerformanceService initialized using injected PerformanceDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - Create performance review request: empId=101, year=2025, rating=4
+2026-01-30 23:14:35 INFO  com.revworkforce.service.PerformanceService - Performance review created successfully for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - Cancel leave request: leaveId=201, empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - Leave cancelled successfully: leaveId=201
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - View leave balance request for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - Reject leave request: leaveId=401
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - Leave rejected successfully: leaveId=401
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - View my leaves request for empId=101
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - View holidays request
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - Approve leave request: leaveId=401
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - Leave approved successfully: leaveId=401
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - Apply leave request: empId=101, typeId=1, start=2025-02-10, end=2025-02-05
+2026-01-30 23:14:35 WARN  com.revworkforce.service.LeaveService - Invalid leave dates for empId=101 : endDate < startDate
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - View team leave requests for managerId=301
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - LeaveService initialized using injected LeaveDAO
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - Apply leave request: empId=101, typeId=1, start=2025-02-01, end=2025-02-05
+2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - Leave applied successfully for empId=101

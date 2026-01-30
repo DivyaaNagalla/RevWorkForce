@@ -1,47 +1,61 @@
 package com.revworkforce.ui;
 
 import java.util.Scanner;
-import com.revworkforce.model.Employee;
-import com.revworkforce.service.PerformanceService;
 
 public class PerformanceUI {
 
-    public static void submitReview(Employee emp) {
+    public static void showMenu(int empId) {
 
         Scanner sc = new Scanner(System.in);
-        PerformanceService service = new PerformanceService();
 
-        System.out.print("Review Year: ");
-        int year = sc.nextInt();
-        sc.nextLine();
+        while (true) {
 
-        System.out.print("Key Deliverables: ");
-        String del = sc.nextLine();
+            System.out.println("\n--- Performance Management ---");
+            System.out.println("1. Create Performance Review");
+            System.out.println("2. View My Goals");
+            System.out.println("3. Update Goal Progress");
+            System.out.println("4. View Manager Feedback");
+            System.out.println("5. Back");
+            System.out.print("Choose option: ");
 
-        System.out.print("Major Accomplishments: ");
-        String acc = sc.nextLine();
+            int choice = sc.nextInt();
+            sc.nextLine();
 
-        System.out.print("Areas of Improvement: ");
-        String imp = sc.nextLine();
+            switch (choice) {
 
-        System.out.print("Self Rating (1-5): ");
-        int rating = sc.nextInt();
+                case 1:
+                    System.out.println(
+                        "Performance review creation – coming soon"
+                    );
+                    break;
 
-        try {
-            int reviewId = service.submitReview(
-                    emp.getEmpId(),
-                    year,
-                    del,
-                    acc,
-                    imp,
-                    rating
-            );
+                case 2:
+                    System.out.println(
+                        "View goals – coming soon"
+                    );
+                    break;
 
-            System.out.println("Review submitted successfully");
-            System.out.println("Review ID : " + reviewId);
+                case 3:
+                    System.out.println(
+                        "Update goal progress – coming soon"
+                    );
+                    break;
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+                case 4:
+                    System.out.println(
+                        "Manager feedback – coming soon"
+                    );
+                    break;
+
+                case 5:
+                    return;
+
+                default:
+                    System.out.println("Invalid option");
+            }
+
+            System.out.println("\nPress Enter to continue...");
+            sc.nextLine();
         }
     }
 }

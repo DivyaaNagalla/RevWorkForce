@@ -1,25 +1,29 @@
 package com.revworkforce.dao;
 
-import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 import com.revworkforce.model.Employee;
 import com.revworkforce.util.DBUtil;
 
 public class EmployeeDAO {
+
     public Employee login(int empId, String password) throws Exception {
 
         String sql =
-            "SELECT E.EMP_ID, E.NAME, E.EMAIL, E.STATUS, E.PASSWORD_STATUS, " +
-            "E.PHONE_NO, E.ADDRESS, E.EMERGENCY_CONT, " +
-            "(SELECT NAME FROM EMPLOYEE M WHERE M.EMP_ID = E.MANAGER_ID) MANAGER_NAME " +
+            "SELECT E.EMP_ID, E.NAME, E.EMAIL, E.PHONE_NO, E.ADDRESS, " +
+            "E.STATUS, E.FIRST_LOGIN, E.SALARY, " +
+            "D.DEPT_NAME, G.DESIG_NAME, " +
+            "M.NAME AS MANAGER_NAME " +
             "FROM EMPLOYEE E " +
-            "WHERE E.EMP_ID = ? AND E.PASSWORD = ?";
+            "LEFT JOIN EMPLOYEE M ON E.MANAGER_ID = M.EMP_ID " +
+            "LEFT JOIN DEPARTMENT D ON E.DEPT_ID = D.DEPT_ID " +
+            "LEFT JOIN DESIGNATION G ON E.DESIG_ID = G.DESIG_ID " +
+            "WHERE E.EMP_ID=? AND E.PASSWORD=?";
 
-        Connection con = DBUtil.getConnection();
-        PreparedStatement ps = con.prepareStatement(sql);
-
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
         ps.setInt(1, empId);
         ps.setString(2, password);
 
@@ -30,138 +34,274 @@ public class EmployeeDAO {
             emp.setEmpId(rs.getInt("EMP_ID"));
             emp.setName(rs.getString("NAME"));
             emp.setEmail(rs.getString("EMAIL"));
-            emp.setStatus(rs.getString("STATUS"));
-            emp.setPasswordStatus(rs.getString("PASSWORD_STATUS"));
             emp.setPhone(rs.getString("PHONE_NO"));
             emp.setAddress(rs.getString("ADDRESS"));
-            emp.setEmergencyContact(rs.getString("EMERGENCY_CONT"));
+            emp.setStatus(rs.getString("STATUS"));
+            emp.setFirstLogin(rs.getString("FIRST_LOGIN"));
+            emp.setSalary(rs.getDouble("SALARY"));
+            emp.setDepartment(rs.getString("DEPT_NAME"));
+            emp.setDesignation(rs.getString("DESIG_NAME"));
             emp.setManagerName(rs.getString("MANAGER_NAME"));
             return emp;
         }
         return null;
     }
-    public int addEmployee(String name,
-                           String email,
-                           String tempPwd) throws Exception {
+
+    public int addEmployee(String name, String email, Date dob, String tempPwd)
+            throws Exception {
+
+        int empId = getNextEmpId();
 
         String sql =
             "INSERT INTO EMPLOYEE " +
-            "(EMP_ID, NAME, EMAIL, PASSWORD, STATUS, PASSWORD_STATUS) " +
-            "VALUES (EMP_SEQ.NEXTVAL, ?, ?, ?, 'ACTIVE', 'NEW')";
+            "(EMP_ID, NAME, EMAIL, DOB, JOIN_DATE, PASSWORD, FIRST_LOGIN, STATUS) " +
+            "VALUES (?, ?, ?, ?, SYSDATE, ?, 'Y', 'ACTIVE')";
 
-        PreparedStatement ps =
-            DBUtil.getConnection().prepareStatement(
-                sql, new String[] { "EMP_ID" }
-            );
-
-        ps.setString(1, name);
-        ps.setString(2, email);
-        ps.setString(3, tempPwd);
-
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, empId);
+        ps.setString(2, name);
+        ps.setString(3, email);
+        ps.setDate(4, dob);
+        ps.setString(5, tempPwd);
         ps.executeUpdate();
 
-        ResultSet rs = ps.getGeneratedKeys();
-        rs.next();
-        return rs.getInt(1);
+        initializeLeaveBalance(empId);
+        savePasswordHistory(empId, tempPwd);
+
+        return empId;
     }
-    public void updatePassword(int empId, String newPwd) throws Exception {
+
+
+    public void updateProfile(int empId, String phone, String address, String emergency)
+            throws Exception {
 
         String sql =
-            "UPDATE EMPLOYEE " +
-            "SET PASSWORD = ?, PASSWORD_STATUS = 'CHANGED' " +
-            "WHERE EMP_ID = ?";
+            "UPDATE EMPLOYEE SET PHONE_NO=?, ADDRESS=?, EMERGENCY_CONTACT=? " +
+            "WHERE EMP_ID=?";
 
-        PreparedStatement ps =
-            DBUtil.getConnection().prepareStatement(sql);
-
-        ps.setString(1, newPwd);
-        ps.setInt(2, empId);
-        ps.executeUpdate();
-    }
-    public void updateProfile(int empId,
-                              String phone,
-                              String address,
-                              String emergency) throws Exception {
-
-        String sql =
-            "UPDATE EMPLOYEE " +
-            "SET PHONE_NO = ?, ADDRESS = ?, EMERGENCY_CONT = ? " +
-            "WHERE EMP_ID = ?";
-
-        PreparedStatement ps =
-            DBUtil.getConnection().prepareStatement(sql);
-
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
         ps.setString(1, phone);
         ps.setString(2, address);
         ps.setString(3, emergency);
         ps.setInt(4, empId);
-
         ps.executeUpdate();
     }
-    public void assignManager(int empId, int managerId) throws Exception {
+
+    public Employee getEmployeeById(int empId) throws Exception {
 
         String sql =
-            "UPDATE EMPLOYEE SET MANAGER_ID = ? WHERE EMP_ID = ?";
+            "SELECT E.EMP_ID, E.NAME, E.EMAIL, E.PHONE_NO, E.ADDRESS, " +
+            "E.STATUS, E.SALARY, D.DEPT_NAME, G.DESIG_NAME, " +
+            "M.NAME AS MANAGER_NAME " +
+            "FROM EMPLOYEE E " +
+            "LEFT JOIN DEPARTMENT D ON E.DEPT_ID=D.DEPT_ID " +
+            "LEFT JOIN DESIGNATION G ON E.DESIG_ID=G.DESIG_ID " +
+            "LEFT JOIN EMPLOYEE M ON E.MANAGER_ID=M.EMP_ID " +
+            "WHERE E.EMP_ID=?";
 
-        PreparedStatement ps =
-            DBUtil.getConnection().prepareStatement(sql);
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, empId);
+        ResultSet rs = ps.executeQuery();
 
-        ps.setInt(1, managerId);
+        if (rs.next()) {
+            Employee emp = new Employee();
+            emp.setEmpId(rs.getInt("EMP_ID"));
+            emp.setName(rs.getString("NAME"));
+            emp.setEmail(rs.getString("EMAIL"));
+            emp.setPhone(rs.getString("PHONE_NO"));
+            emp.setAddress(rs.getString("ADDRESS"));
+            emp.setStatus(rs.getString("STATUS"));
+            emp.setSalary(rs.getDouble("SALARY"));
+            emp.setDepartment(rs.getString("DEPT_NAME"));
+            emp.setDesignation(rs.getString("DESIG_NAME"));
+            emp.setManagerName(rs.getString("MANAGER_NAME"));
+            return emp;
+        }
+        return null;
+    }
+
+    public void updatePassword(int empId, String pwd) throws Exception {
+
+        String sql =
+            "UPDATE EMPLOYEE SET PASSWORD=?, FIRST_LOGIN='N' WHERE EMP_ID=?";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setString(1, pwd);
         ps.setInt(2, empId);
         ps.executeUpdate();
     }
-    public void getUpcomingBirthdays() throws Exception {
+
+    public boolean isPasswordUsedBefore(int empId, String pwd) throws Exception {
 
         String sql =
-            "SELECT NAME, DOB " +
-            "FROM EMPLOYEE " +
-            "WHERE TO_CHAR(DOB,'MM') = TO_CHAR(SYSDATE,'MM')";
+            "SELECT COUNT(*) FROM PASSWORD_HISTORY WHERE EMP_ID=? AND PASSWORD=?";
 
-        PreparedStatement ps =
-            DBUtil.getConnection().prepareStatement(sql);
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, empId);
+        ps.setString(2, pwd);
 
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return rs.getInt(1) > 0;
+    }
+
+    public void savePasswordHistory(int empId, String pwd) throws Exception {
+
+        String sql =
+            "INSERT INTO PASSWORD_HISTORY (EMP_ID, PASSWORD) VALUES (?, ?)";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, empId);
+        ps.setString(2, pwd);
+        ps.executeUpdate();
+    }
+
+    public void resetPassword(int empId, String pwd) throws Exception {
+
+        String sql =
+            "UPDATE EMPLOYEE SET PASSWORD=?, FIRST_LOGIN='Y' WHERE EMP_ID=?";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setString(1, pwd);
+        ps.setInt(2, empId);
+        ps.executeUpdate();
+    }
+
+    public ResultSet getSecurityQuestions(int empId) throws Exception {
+
+        String sql =
+            "SELECT QUESTION FROM EMP_SECURITY WHERE EMP_ID=?";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, empId);
+        return ps.executeQuery();
+    }
+
+    public boolean validateSecurityAnswers(int empId, String a1, String a2)
+            throws Exception {
+
+        String sql =
+            "SELECT ANSWER FROM EMP_SECURITY WHERE EMP_ID=?";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, empId);
+
+        ResultSet rs = ps.executeQuery();
+        int count = 0;
+
+        while (rs.next()) {
+            String ans = rs.getString("ANSWER");
+            if (ans.equalsIgnoreCase(a1) || ans.equalsIgnoreCase(a2))
+                count++;
+        }
+        return count == 2;
+    }
+
+    public void assignDepartment(int empId, int deptId) throws Exception {
+
+        String sql =
+            "UPDATE EMPLOYEE SET DEPT_ID=? WHERE EMP_ID=?";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, deptId);
+        ps.setInt(2, empId);
+        ps.executeUpdate();
+    }
+
+    public void assignDesignation(int empId, int desigId) throws Exception {
+
+        String sql =
+            "UPDATE EMPLOYEE SET DESIG_ID=? WHERE EMP_ID=?";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, desigId);
+        ps.setInt(2, empId);
+        ps.executeUpdate();
+    }
+
+    public void viewMyTeam(int managerId) throws Exception {
+
+        String sql =
+            "SELECT EMP_ID, NAME, EMAIL FROM EMPLOYEE " +
+            "WHERE MANAGER_ID=? AND STATUS='ACTIVE'";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, managerId);
+        ResultSet rs = ps.executeQuery();
+
+        System.out.println("\n--- My Team ---");
+        boolean found = false;
+
+        while (rs.next()) {
+            found = true;
+            System.out.println(
+                rs.getInt("EMP_ID") + " | " +
+                rs.getString("NAME") + " | " +
+                rs.getString("EMAIL")
+            );
+        }
+
+        if (!found)
+            System.out.println("No team members found");
+    }
+
+    public void viewUpcomingBirthdays() throws Exception {
+
+        String sql =
+            "SELECT NAME, DOB FROM EMPLOYEE " +
+            "WHERE EXTRACT(MONTH FROM DOB)=EXTRACT(MONTH FROM SYSDATE)";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
         System.out.println("\n--- Upcoming Birthdays ---");
+        boolean found = false;
+
         while (rs.next()) {
-            System.out.println(rs.getString("NAME") + " - " + rs.getDate("DOB"));
+            found = true;
+            System.out.println(
+                rs.getString("NAME") + " | " + rs.getDate("DOB")
+            );
         }
+
+        if (!found)
+            System.out.println("No birthdays this month");
     }
-    public void getWorkAnniversaries() throws Exception {
+
+    public void viewWorkAnniversaries() throws Exception {
 
         String sql =
-            "SELECT NAME, JOIN_DATE " +
-            "FROM EMPLOYEE " +
-            "WHERE TO_CHAR(JOIN_DATE,'MM') = TO_CHAR(SYSDATE,'MM')";
+            "SELECT NAME, JOIN_DATE FROM EMPLOYEE " +
+            "WHERE EXTRACT(MONTH FROM JOIN_DATE)=EXTRACT(MONTH FROM SYSDATE)";
 
-        PreparedStatement ps =
-            DBUtil.getConnection().prepareStatement(sql);
-
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
         System.out.println("\n--- Work Anniversaries ---");
+        boolean found = false;
+
         while (rs.next()) {
+            found = true;
             System.out.println(
-                rs.getString("NAME") + " - " +
-                rs.getDate("JOIN_DATE")
+                rs.getString("NAME") + " | DOJ: " + rs.getDate("JOIN_DATE")
             );
         }
+
+        if (!found)
+            System.out.println("No work anniversaries this month");
     }
 
-    public void getEmployeeDirectory() throws Exception {
+    public void viewEmployeeDirectory() throws Exception {
 
         String sql =
-            "SELECT EMP_ID, NAME, EMAIL " +
-            "FROM EMPLOYEE " +
-            "WHERE STATUS = 'ACTIVE' " +
-            "ORDER BY NAME";
+            "SELECT EMP_ID, NAME, EMAIL, PHONE_NO FROM EMPLOYEE " +
+            "WHERE STATUS='ACTIVE' ORDER BY NAME";
 
-        PreparedStatement ps =
-            DBUtil.getConnection().prepareStatement(sql);
-
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
         System.out.println("\n--- Employee Directory ---");
+
         while (rs.next()) {
             System.out.println(
                 rs.getInt("EMP_ID") + " | " +
@@ -170,4 +310,156 @@ public class EmployeeDAO {
             );
         }
     }
+
+    private void initializeLeaveBalance(int empId) throws Exception {
+
+        String sql =
+            "INSERT INTO LEAVE_BALANCE (EMP_ID, LEAVE_TYPE_ID, AVAILABLE_DAYS) " +
+            "SELECT ?, LEAVE_TYPE_ID, MAX_QUOTA FROM LEAVE_TYPE";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, empId);
+        ps.executeUpdate();
+    }
+
+    private int getNextEmpId() throws Exception {
+
+        String sql = "SELECT EMP_SEQ.NEXTVAL FROM DUAL";
+        Statement st = DBUtil.getConnection().createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        rs.next();
+        return rs.getInt(1);
+    }
+    public void viewTeamAttendance(int managerId) throws Exception {
+
+        String sql =
+            "SELECT E.NAME, A.ATTENDANCE_DATE, A.STATUS " +
+            "FROM ATTENDANCE A " +
+            "JOIN EMPLOYEE E ON A.EMP_ID = E.EMP_ID " +
+            "WHERE E.MANAGER_ID = ? " +
+            "ORDER BY A.ATTENDANCE_DATE DESC";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, managerId);
+
+        ResultSet rs = ps.executeQuery();
+
+        System.out.println("\n--- Team Attendance ---");
+
+        boolean found = false;
+
+        while (rs.next()) {
+            found = true;
+            System.out.println(
+                rs.getString("NAME") + " | " +
+                rs.getDate("ATTENDANCE_DATE") + " | " +
+                rs.getString("STATUS")
+            );
+        }
+
+        if (!found) {
+            System.out.println("No attendance records found");
+        }
+    }
+    public void viewTeamHierarchy(int managerId) throws Exception {
+
+        String sql =
+            "SELECT E.EMP_ID, E.NAME, E.EMAIL, " +
+            "NVL(D.DEPT_NAME, 'N/A') AS DEPT_NAME, " +
+            "NVL(G.DESIG_NAME, 'N/A') AS DESIG_NAME " +
+            "FROM EMPLOYEE E " +
+            "LEFT JOIN DEPARTMENT D ON E.DEPT_ID = D.DEPT_ID " +
+            "LEFT JOIN DESIGNATION G ON E.DESIG_ID = G.DESIG_ID " +
+            "WHERE E.MANAGER_ID = ? " +
+            "ORDER BY E.NAME";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, managerId);
+
+        ResultSet rs = ps.executeQuery();
+
+        System.out.println("\n--- Team Hierarchy ---");
+
+        boolean found = false;
+
+        while (rs.next()) {
+            found = true;
+            System.out.println(
+                rs.getInt("EMP_ID") + " | " +
+                rs.getString("NAME") + " | " +
+                rs.getString("EMAIL") + " | " +
+                rs.getString("DEPT_NAME") + " | " +
+                rs.getString("DESIG_NAME")
+            );
+        }
+
+        if (!found) {
+            System.out.println("No team members found");
+        }
+    }
+    public void assignManager(int empId, int managerId) throws Exception {
+
+       
+        String check =
+            "SELECT COUNT(*) FROM EMPLOYEE WHERE EMP_ID=? AND STATUS='ACTIVE'";
+
+        PreparedStatement cps =
+            DBUtil.getConnection().prepareStatement(check);
+
+        cps.setInt(1, managerId);
+        ResultSet rs = cps.executeQuery();
+        rs.next();
+
+        if (rs.getInt(1) == 0) {
+            throw new Exception("Manager ID does not exist or inactive");
+        }
+
+        String sql =
+            "UPDATE EMPLOYEE SET MANAGER_ID=? WHERE EMP_ID=?";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, managerId);
+        ps.setInt(2, empId);
+        ps.executeUpdate();
+    }
+    public void viewAllManagers() throws Exception {
+
+        String sql =
+            "SELECT DISTINCT M.EMP_ID, M.NAME, M.EMAIL, M.PHONE_NO " +
+            "FROM EMPLOYEE M " +
+            "WHERE M.EMP_ID IN (" +
+            "   SELECT DISTINCT MANAGER_ID FROM EMPLOYEE WHERE MANAGER_ID IS NOT NULL" +
+            ") AND M.STATUS = 'ACTIVE' " +
+            "ORDER BY M.NAME";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ResultSet rs = ps.executeQuery();
+
+        System.out.println("\n--- Managers List ---");
+
+        boolean found = false;
+
+        while (rs.next()) {
+            found = true;
+            System.out.println(
+                rs.getInt("EMP_ID") + " | " +
+                rs.getString("NAME") + " | " +
+                rs.getString("EMAIL") + " | " +
+                rs.getString("PHONE_NO")
+            );
+        }
+
+        if (!found) {
+            System.out.println("No managers found");
+        }
+    }
+
 }

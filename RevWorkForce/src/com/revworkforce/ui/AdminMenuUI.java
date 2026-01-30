@@ -1,6 +1,8 @@
 package com.revworkforce.ui;
 
+import java.sql.Date;
 import java.util.Scanner;
+
 import com.revworkforce.service.EmployeeService;
 
 public class AdminMenuUI {
@@ -11,33 +13,80 @@ public class AdminMenuUI {
         EmployeeService service = new EmployeeService();
 
         while (true) {
+
             System.out.println("\n--- Admin Menu ---");
             System.out.println("1. Add Employee");
             System.out.println("2. Assign Manager");
-            System.out.println("3. Exit");
+            System.out.println("3. Assign Department");
+            System.out.println("4. Assign Designation");
+            System.out.println("5. View All Managers");
+            System.out.println("6. Exit");
+            System.out.print("Choose option: ");
 
             int choice = sc.nextInt();
+            sc.nextLine();
 
-            switch (choice) {
-                case 1:
-                    AddEmployeeUI.addEmployee();
-                    break;
+            try {
 
-                case 2:
-                    System.out.print("Employee ID: ");
-                    int empId = sc.nextInt();
-                    System.out.print("Manager ID: ");
-                    int mgrId = sc.nextInt();
-                    try {
+                switch (choice) {
+
+                    case 1:
+                        System.out.print("Name : ");
+                        String name = sc.nextLine();
+
+                        System.out.print("Email : ");
+                        String email = sc.nextLine();
+
+                        System.out.print("DOB (yyyy-mm-dd): ");
+                        Date dob = Date.valueOf(sc.nextLine());
+
+                        service.addEmployee(name, email, dob);
+                        break;
+
+                    case 2:
+                        System.out.print("Employee ID : ");
+                        int empId = sc.nextInt();
+
+                        System.out.print("Manager ID  : ");
+                        int mgrId = sc.nextInt();
+
                         service.assignManager(empId, mgrId);
-                        System.out.println("Manager assigned");
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-                    break;
+                        break;
 
-                case 3:
-                    return;
+                    case 3:
+                        System.out.print("Employee ID : ");
+                        int eId = sc.nextInt();
+
+                        System.out.print("Department ID : ");
+                        int deptId = sc.nextInt();
+
+                        service.assignDepartment(eId, deptId);
+                        break;
+
+                    case 4:
+                        System.out.print("Employee ID : ");
+                        int emp = sc.nextInt();
+
+                        System.out.print("Designation ID : ");
+                        int desigId = sc.nextInt();
+
+                        service.assignDesignation(emp, desigId);
+                        break;
+
+                    case 5:
+                        service.viewAllManagers();
+                        break;
+
+                    case 6:
+                        return;
+
+
+                    default:
+                        System.out.println("Invalid option");
+                }
+
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }

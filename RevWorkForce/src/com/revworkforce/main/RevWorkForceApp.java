@@ -3,6 +3,7 @@ package com.revworkforce.main;
 import java.util.Scanner;
 
 import com.revworkforce.model.Employee;
+import com.revworkforce.service.NotificationService;
 import com.revworkforce.ui.AdminMenuUI;
 import com.revworkforce.ui.EmployeeMenuUI;
 import com.revworkforce.ui.LoginUI;
@@ -24,29 +25,43 @@ public class RevWorkForceApp {
             System.out.print("Choose role: ");
 
             int choice = sc.nextInt();
+            sc.nextLine();
 
-            switch (choice) {
+            try {
 
-                case 1:
-                    AdminMenuUI.showMenu();
-                    break;
+                switch (choice) {
 
-                case 2:
-                    Employee emp = LoginUI.login();
+                    case 1:
+                        AdminMenuUI.showMenu();
+                        break;
 
-                    if (emp != null) {
-                        boolean isManager =
-                            emp.getManagerName() != null;
-                        EmployeeMenuUI.showMenu(emp, isManager);
-                    }
-                    break;
+                    case 2:
+                        Employee emp = LoginUI.login();
 
-                case 3:
-                    System.out.println("Thank you!");
-                    return;
+                        if (emp != null) {
 
-                default:
-                    System.out.println("Invalid choice");
+                 
+                            NotificationService notifService =
+                                    new NotificationService();
+                            notifService.showUnreadOnLogin(emp.getEmpId());
+
+                            boolean isManager =
+                                    emp.getManagerName() != null;
+
+                            EmployeeMenuUI.showMenu(emp, isManager);
+                        }
+                        break;
+
+                    case 3:
+                        System.out.println("Thank you!");
+                        return;
+
+                    default:
+                        System.out.println("Invalid choice");
+                }
+
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
