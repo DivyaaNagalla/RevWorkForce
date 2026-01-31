@@ -256,3 +256,4 @@
 2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - Apply leave request: empId=101, typeId=1, start=2025-02-01, end=2025-02-05
 2026-01-30 23:14:35 INFO  com.revworkforce.service.LeaveService - Leave applied successfully for empId=101
 2026-01-31 09:12:44 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor
+2026-01-31 09:51:18 INFO  com.revworkforce.service.EmployeeService - EmployeeService initialized using default constructor

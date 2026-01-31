@@ -1,5 +1,5 @@
 package com.revworkforce.ui;
-
+import com.revworkforce.util.EmailValidator;
 import java.sql.Date;
 import java.util.Scanner;
 
@@ -33,9 +33,18 @@ public class AdminMenuUI {
                     case 1:
                         System.out.print("Name : ");
                         String name = sc.nextLine();
+                       String email;
+                        while(true){
+                        	try{
+                        	     System.out.print("Email : ");
+                        	       email = sc.nextLine();
+                        	       EmailValidator.validate(email);
+                        	       break;
+                        	}catch(Exception e){
+                        		System.out.println("Enter valid email " +e.getMessage());
+                        	}
+                        }
 
-                        System.out.print("Email : ");
-                        String email = sc.nextLine();
 
                         System.out.print("DOB (yyyy-mm-dd): ");
                         Date dob = Date.valueOf(sc.nextLine());
