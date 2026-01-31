@@ -1,0 +1,57 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+
+import com.revworkforce.service.LeaveService;
+
+public class EmployeeLeaveUI {
+
+    public static void showMenu(int empId) {
+
+        Scanner sc = new Scanner(System.in);
+        LeaveService leaveService = new LeaveService();
+
+        while (true) {
+
+            System.out.println("\n--- Leave Management ---");
+            System.out.println("1. View Leave Balance");
+            System.out.println("2. Apply Leave");
+            System.out.println("3. View My Leaves");
+            System.out.println("4. View Holidays");
+            System.out.println("5. Back");
+            System.out.print("Choose option: ");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            try {
+                switch (choice) {
+
+                    case 1:
+                        leaveService.viewLeaveBalance(empId);
+                        break;
+
+                    case 2:
+                        leaveService.applyLeave(empId);
+                        break;
+
+                    case 3:
+                        leaveService.viewMyLeaves(empId);
+                        break;
+
+                    case 4:
+                        leaveService.viewHolidays();
+                        break;
+
+                    case 5:
+                        return;
+
+                    default:
+                        System.out.println("Invalid option");
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+}

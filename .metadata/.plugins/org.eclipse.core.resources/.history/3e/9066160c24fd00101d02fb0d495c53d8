@@ -1,0 +1,46 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+import com.revworkforce.service.EmployeeService;
+import com.revworkforce.service.NotificationService;
+
+public class AdditionalDetailsUI {
+
+    public static void showMenu(int empId) {
+
+        Scanner sc = new Scanner(System.in);
+        EmployeeService empService = new EmployeeService();
+        NotificationService notifService = new NotificationService();
+
+        while (true) {
+
+            System.out.println("\n--- Additional Details ---");
+            System.out.println("1. View Notifications");
+            System.out.println("2. Upcoming Birthdays");
+            System.out.println("3. Work Anniversaries");
+            System.out.println("4. Employee Directory");
+            System.out.println("5. Back");
+            System.out.print("Choose option: ");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            try {
+                if (choice == 1)
+                    notifService.viewNotifications(empId);
+                else if (choice == 2)
+                    empService.viewBirthdays();
+                else if (choice == 3)
+                    empService.viewAnniversaries();
+                else if (choice == 4)
+                    empService.viewEmployeeDirectory();
+                else if (choice == 5)
+                    return;
+                else
+                    System.out.println("Invalid choice");
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+}

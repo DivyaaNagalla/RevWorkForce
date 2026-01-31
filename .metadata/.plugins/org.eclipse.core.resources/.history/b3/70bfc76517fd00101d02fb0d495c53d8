@@ -1,0 +1,50 @@
+package com.revworkforce.dao;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import com.revworkforce.util.DBUtil;
+
+public class PerformanceDAO {
+
+    public void createReview(int empId,
+                             int year,
+                             String deliverables,
+                             String accomplishments,
+                             String improvements,
+                             int selfRating) throws Exception {
+
+        String sql =
+            "INSERT INTO PERFORMANCE_REVIEW " +
+            "(REVIEW_ID, EMP_ID, REVIEW_YEAR, KEY_DELIVERABLES, " +
+            "ACCOMPLISHMENTS, IMPROVEMENTS, SELF_RATING, STATUS) " +
+            "VALUES (REVIEW_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, 'SUBMITTED')";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, empId);
+        ps.setInt(2, year);
+        ps.setString(3, deliverables);
+        ps.setString(4, accomplishments);
+        ps.setString(5, improvements);
+        ps.setInt(6, selfRating);
+
+        ps.executeUpdate();
+    }
+
+    public ResultSet getMyReviews(int empId) throws Exception {
+
+        String sql =
+            "SELECT REVIEW_YEAR, SELF_RATING, STATUS, MANAGER_FEEDBACK " +
+            "FROM PERFORMANCE_REVIEW " +
+            "WHERE EMP_ID=? " +
+            "ORDER BY REVIEW_YEAR DESC";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, empId);
+        return ps.executeQuery();
+    }
+}

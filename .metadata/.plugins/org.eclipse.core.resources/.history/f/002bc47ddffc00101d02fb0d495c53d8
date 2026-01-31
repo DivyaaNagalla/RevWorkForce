@@ -1,0 +1,46 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+import com.revworkforce.model.Employee;
+
+public class EmployeeMenuUI {
+
+    public static void showMenu(Employee emp, boolean isManager) {
+
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+
+            System.out.println("\n--- Employee Menu ---");
+            System.out.println("1. View Profile");
+            System.out.println("2. Update Profile");
+            System.out.println("3. Leave Management");
+            System.out.println("4. Logout");
+            System.out.print("Choose option: ");
+
+            int ch = sc.nextInt();
+
+            switch (ch) {
+
+                case 1:
+                    ProfileUI.viewProfile(emp);
+                    break;
+
+                case 2:
+                    ProfileUI.updateProfile(emp);
+                    break;
+
+                case 3:
+                    EmployeeLeaveUI.showMenu(emp);
+                    break;
+
+                case 4:
+                    System.out.println("Logged out");
+                    return;
+
+                default:
+                    System.out.println("Invalid option");
+            }
+        }
+    }
+}

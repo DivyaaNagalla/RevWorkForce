@@ -1,0 +1,23 @@
+package com.revworkforce.dao;
+
+import java.sql.PreparedStatement;
+
+import com.revworkforce.util.DBUtil;
+
+public class AuditDAO {
+
+    public void logAction(int userId, String action) throws Exception {
+
+        String sql =
+            "INSERT INTO AUDIT_LOG " +
+            "(LOG_ID, USER_ID, ACTION, ACTION_DATE) " +
+            "VALUES (AUDIT_SEQ.NEXTVAL, ?, ?, SYSDATE)";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, userId);
+        ps.setString(2, action);
+        ps.executeUpdate();
+    }
+}

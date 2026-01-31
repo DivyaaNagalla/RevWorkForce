@@ -1,0 +1,106 @@
+package com.revworkforce.service;
+
+import java.sql.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.revworkforce.dao.LeaveDAO;
+
+public class LeaveService {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(LeaveService.class);
+
+    private LeaveDAO dao;
+
+    // 🔹 Default constructor (for UI / normal execution)
+    public LeaveService() {
+        this.dao = new LeaveDAO();
+        logger.info("LeaveService initialized using default constructor");
+    }
+
+    // 🔹 Constructor for Unit Testing (Mockito)
+    public LeaveService(LeaveDAO dao) {
+        this.dao = dao;
+        logger.info("LeaveService initialized using injected LeaveDAO");
+    }
+
+    // ================= VIEW BALANCE =================
+
+    public void viewLeaveBalance(int empId) throws Exception {
+        logger.info("View leave balance request for empId={}", empId);
+        dao.viewLeaveBalance(empId);
+    }
+
+    // ================= APPLY LEAVE =================
+
+    public void applyLeave(int empId,
+                           int leaveTypeId,
+                           Date start,
+                           Date end,
+                           String reason) throws Exception {
+
+        logger.info("Apply leave request: empId={}, typeId={}, start={}, end={}",
+                empId, leaveTypeId, start, end);
+
+        if (end.before(start)) {
+            logger.warn("Invalid leave dates for empId={} : endDate < startDate", empId);
+            throw new Exception("End date cannot be before start date");
+        }
+
+        try {
+            dao.applyLeave(empId, leaveTypeId, start, end, reason);
+            logger.info("Leave applied successfully for empId={}", empId);
+        } catch (Exception e) {
+            logger.error("Failed to apply leave for empId={}", empId, e);
+            throw e;
+        }
+    }
+
+    // ================= VIEW MY LEAVES =================
+
+    public void viewMyLeaves(int empId) throws Exception {
+        logger.info("View my leaves request for empId={}", empId);
+        dao.viewMyLeaves(empId);
+    }
+
+    // ================= HOLIDAYS =================
+
+    public void viewHolidays() throws Exception {
+        logger.info("View holidays request");
+        dao.viewHolidays();
+    }
+
+    // ================= CANCEL LEAVE =================
+
+    public void cancelLeave(int leaveId, int empId) throws Exception {
+        logger.info("Cancel leave request: leaveId={}, empId={}", leaveId, empId);
+        try {
+            dao.cancelLeave(leaveId, empId);
+            logger.info("Leave cancelled successfully: leaveId={}", leaveId);
+        } catch (Exception e) {
+            logger.error("Failed to cancel leave: leaveId={}", leaveId, e);
+            throw e;
+        }
+    }
+
+    // ================= MANAGER ACTIONS =================
+
+    public void viewTeamLeaveRequests(int managerId) throws Exception {
+        logger.info("View team leave requests for managerId={}", managerId);
+        dao.viewTeamLeaveRequests(managerId);
+    }
+
+    public void approveLeave(int leaveId, String comment) throws Exception {
+        logger.info("Approve leave request: leaveId={}", leaveId);
+        dao.approveOrRejectLeave(leaveId, "APPROVED", comment);
+        logger.info("Leave approved successfully: leaveId={}", leaveId);
+    }
+
+    public void rejectLeave(int leaveId, String comment) throws Exception {
+        logger.info("Reject leave request: leaveId={}", leaveId);
+        dao.approveOrRejectLeave(leaveId, "REJECTED", comment);
+        logger.info("Leave rejected successfully: leaveId={}", leaveId);
+    }
+}

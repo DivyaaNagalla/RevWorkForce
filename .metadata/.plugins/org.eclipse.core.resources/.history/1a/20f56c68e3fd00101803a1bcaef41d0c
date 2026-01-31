@@ -1,0 +1,96 @@
+package com.revworkforce.ui;
+
+import java.sql.Date;
+import java.util.Scanner;
+
+import com.revworkforce.util.DOBValidator;
+import com.revworkforce.util.EmailValidator;
+
+
+import com.revworkforce.service.EmployeeService;
+
+public class AdminMenuUI {
+
+    public static void showMenu() {
+
+        Scanner sc = new Scanner(System.in);
+        EmployeeService service = new EmployeeService();
+
+        while (true) {
+
+            System.out.println("\n--- Admin Menu ---");
+            System.out.println("1. Add Employee");
+            System.out.println("2. Assign Manager");
+            System.out.println("3. Exit");
+            System.out.print("Choose option: ");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            try {
+                switch (choice) {
+
+                case 1:
+                    System.out.print("Name : ");
+                    String name = sc.nextLine();
+
+                    // 🔁 EMAIL VALIDATION LOOP
+                    String email;
+                    while (true) {
+                        System.out.print("Email : ");
+                        email = sc.nextLine();
+
+                        try {
+                            EmailValidator.validate(email);
+                            email = email.trim();
+                            break; // ✅ valid email
+                        } catch (Exception e) {
+                            System.out.println("❌ " + e.getMessage());
+                            System.out.println("Please enter email again.\n");
+                        }
+                    }
+
+                 // 🔁 DOB VALIDATION LOOP
+                    Date dob;
+                    while (true) {
+                        System.out.print("DOB (yyyy-mm-dd) : ");
+                        String dobStr = sc.nextLine();
+
+                        try {
+                            dob = Date.valueOf(dobStr);   // format validation
+                            DOBValidator.validate(dob);   // business validation
+                            break; // ✅ valid DOB
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("❌ Invalid date format. Please use yyyy-mm-dd.\n");
+                        } catch (Exception e) {
+                            System.out.println("❌ " + e.getMessage());
+                            System.out.println("Please enter DOB again.\n");
+                        }
+                    }
+
+                    service.addEmployee(name, email, dob);
+                    System.out.println("✅ Employee added successfully!");
+                    break;
+
+                    case 2:
+                        System.out.print("Employee ID : ");
+                        int empId = sc.nextInt();
+
+                        System.out.print("Manager ID  : ");
+                        int mgrId = sc.nextInt();
+
+                        service.assignManager(empId, mgrId);
+                        break;
+
+                    case 3:
+                        return;
+
+                    default:
+                        System.out.println("Invalid choice");
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+}

@@ -1,0 +1,81 @@
+package com.revworkforce.dao;
+
+import java.sql.*;
+import com.revworkforce.util.DBUtil;
+
+public class PerformanceDAO {
+
+    public void createReview(int empId, int year,
+                             String deliverables,
+                             String achievements,
+                             String improvements,
+                             int rating) throws Exception {
+
+        String sql =
+            "INSERT INTO PERFORMANCE_REVIEW " +
+            "(REVIEW_ID, EMP_ID, REVIEW_YEAR, DELIVERABLES, ACHIEVEMENTS, IMPROVEMENTS, SELF_RATING) " +
+            "VALUES (REVIEW_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, empId);
+        ps.setInt(2, year);
+        ps.setString(3, deliverables);
+        ps.setString(4, achievements);
+        ps.setString(5, improvements);
+        ps.setInt(6, rating);
+
+        ps.executeUpdate();
+    }
+    public void viewTeamReviews(int managerId) throws Exception {
+
+        String sql =
+            "SELECT PR.REVIEW_ID, E.NAME, PR.REVIEW_YEAR, PR.SELF_RATING " +
+            "FROM PERFORMANCE_REVIEW PR " +
+            "JOIN EMPLOYEE E ON PR.EMP_ID = E.EMP_ID " +
+            "WHERE E.MANAGER_ID = ?";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, managerId);
+        ResultSet rs = ps.executeQuery();
+
+        boolean found = false;
+        System.out.println("\n--- Team Performance Reviews ---");
+
+        while (rs.next()) {
+            found = true;
+            System.out.println(
+                "Review ID: " + rs.getInt("REVIEW_ID") +
+                " | Employee: " + rs.getString("NAME") +
+                " | Year: " + rs.getInt("REVIEW_YEAR") +
+                " | Self Rating: " + rs.getInt("SELF_RATING")
+            );
+        }
+
+        if (!found) {
+            System.out.println("No reviews submitted by team");
+        }
+    }
+    public void giveManagerFeedback(int reviewId,
+            int rating,
+            String feedback) throws Exception {
+
+String sql =
+"UPDATE PERFORMANCE_REVIEW " +
+"SET MANAGER_RATING = ?, MANAGER_FEEDBACK = ? " +
+"WHERE REVIEW_ID = ?";
+
+PreparedStatement ps =
+DBUtil.getConnection().prepareStatement(sql);
+
+ps.setInt(1, rating);
+ps.setString(2, feedback);
+ps.setInt(3, reviewId);
+
+ps.executeUpdate();
+}
+
+}

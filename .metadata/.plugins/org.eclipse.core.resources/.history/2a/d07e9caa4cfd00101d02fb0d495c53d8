@@ -1,0 +1,147 @@
+package com.revworkforce.dao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class PerformanceDAO {
+
+    private Connection getConnection() throws Exception {
+        Class.forName("oracle.jdbc.driver.OracleDriver");
+        return DriverManager.getConnection(
+            "jdbc:oracle:thin:@localhost:1521:xe",
+            "system",
+            "oracle"
+        );
+    }
+
+    public void createReview(int empId, int year,
+                             String kd, String acc,
+                             String imp, int rating) throws Exception {
+
+        String sql =
+            "INSERT INTO PERFORMANCE_REVIEW " +
+            "(REVIEW_ID, EMP_ID, REVIEW_YEAR, KEY_DELIVERABLES, ACHIEVEMENTS, IMPROVEMENTS, SELF_RATING, STATUS) " +
+            "VALUES (REVIEW_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, 'SUBMITTED')";
+
+        Connection con = getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+
+        ps.setInt(1, empId);
+        ps.setInt(2, year);
+        ps.setString(3, kd);
+        ps.setString(4, acc);
+        ps.setString(5, imp);
+        ps.setInt(6, rating);
+
+        ps.executeUpdate();
+        con.close();
+    }
+    public ResultSet getMyReviews(int empId) throws Exception {
+
+        String sql =
+            "SELECT REVIEW_YEAR, STATUS, SELF_RATING, MANAGER_FEEDBACK " +
+            "FROM PERFORMANCE_REVIEW " +
+            "WHERE EMP_ID = ? " +
+            "ORDER BY REVIEW_YEAR DESC";
+
+        Connection con = getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, empId);
+
+        return ps.executeQuery(); // ResultSet used in Service
+    }
+
+    public ResultSet getMyGoals(int empId) throws Exception {
+
+        String sql =
+            "SELECT GOAL_ID, GOAL_NAME, PROGRESS " +
+            "FROM GOALS " +
+            "WHERE EMP_ID = ?";
+
+        Connection con = getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, empId);
+
+        return ps.executeQuery();
+    }
+
+    public int updateGoalProgress(int gid, int prog) throws Exception {
+
+        String sql =
+            "UPDATE GOALS SET PROGRESS = ? WHERE GOAL_ID = ?";
+
+        Connection con = getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+
+        ps.setInt(1, prog);
+        ps.setInt(2, gid);
+
+        int rows = ps.executeUpdate();
+        con.close();
+
+        return rows;
+    }
+    public ResultSet getManagerFeedback(int empId) throws Exception {
+
+        String sql =
+            "SELECT REVIEW_YEAR, MANAGER_FEEDBACK " +
+            "FROM PERFORMANCE_REVIEW " +
+            "WHERE EMP_ID = ? AND MANAGER_FEEDBACK IS NOT NULL";
+
+        Connection con = getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, empId);
+
+        return ps.executeQuery();
+    }
+    public ResultSet getTeamReviews(int managerId) throws Exception {
+
+        String sql =
+            "SELECT pr.EMP_ID, pr.REVIEW_YEAR, pr.SELF_RATING " +
+            "FROM PERFORMANCE_REVIEW pr " +
+            "JOIN EMPLOYEE e ON pr.EMP_ID = e.EMP_ID " +
+            "WHERE e.MANAGER_ID = ?";
+
+        Connection con = getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, managerId);
+
+        return ps.executeQuery();
+    }
+    public int giveFeedback(int reviewId, String fb, int rate) throws Exception {
+
+        String sql =
+            "UPDATE PERFORMANCE_REVIEW " +
+            "SET MANAGER_FEEDBACK = ?, MANAGER_RATING = ?, STATUS = 'REVIEWED' " +
+            "WHERE REVIEW_ID = ?";
+
+        Connection con = getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+
+        ps.setString(1, fb);
+        ps.setInt(2, rate);
+        ps.setInt(3, reviewId);
+
+        int rows = ps.executeUpdate();
+        con.close();
+
+        return rows;
+    }
+    public ResultSet getTeamPerformanceSummary(int managerId) throws Exception {
+
+        String sql =
+            "SELECT e.EMP_ID, AVG(pr.SELF_RATING) AS AVG_RATING " +
+            "FROM PERFORMANCE_REVIEW pr " +
+            "JOIN EMPLOYEE e ON pr.EMP_ID = e.EMP_ID " +
+            "WHERE e.MANAGER_ID = ? " +
+            "GROUP BY e.EMP_ID";
+
+        Connection con = getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, managerId);
+
+        return ps.executeQuery();
+    }
+}

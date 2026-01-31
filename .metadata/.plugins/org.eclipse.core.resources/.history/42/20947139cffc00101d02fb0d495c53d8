@@ -1,0 +1,106 @@
+package com.revworkforce.dao;
+
+import java.sql.*;
+import com.revworkforce.util.DBUtil;
+
+public class EmployeeDAO {
+
+    public void addEmployee(String name,
+                            String email,
+                            String phone,
+                            String address,
+                            Date dob,
+                            int deptId,
+                            int desigId,
+                            int managerId) throws Exception {
+
+        String sql =
+            "INSERT INTO EMPLOYEE " +
+            "(EMP_ID, NAME, EMAIL, PHONE_NO, ADDRESS, DOB, " +
+            "DEPT_ID, DESIG_ID, MANAGER_ID, STATUS) " +
+            "VALUES (EMP_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE')";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setString(1, name);
+        ps.setString(2, email);
+        ps.setString(3, phone);
+        ps.setString(4, address);
+        ps.setDate(5, dob);
+        ps.setInt(6, deptId);
+        ps.setInt(7, desigId);
+        ps.setInt(8, managerId);
+        ps.executeUpdate();
+    }
+
+    public void viewAllEmployees() throws Exception {
+
+        String sql =
+            "SELECT EMP_ID, NAME, EMAIL, STATUS FROM EMPLOYEE";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            System.out.println(
+                rs.getInt(1) + " | " +
+                rs.getString(2) + " | " +
+                rs.getString(3) + " | " +
+                rs.getString(4)
+            );
+        }
+    }
+
+    public void updateEmployeeStatus(int empId,
+                                     String status) throws Exception {
+
+        String sql =
+            "UPDATE EMPLOYEE SET STATUS=? WHERE EMP_ID=?";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setString(1, status);
+        ps.setInt(2, empId);
+        ps.executeUpdate();
+    }
+
+    public void assignManager(int empId,
+                              int managerId) throws Exception {
+
+        String sql =
+            "UPDATE EMPLOYEE SET MANAGER_ID=? WHERE EMP_ID=?";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, managerId);
+        ps.setInt(2, empId);
+        ps.executeUpdate();
+    }
+
+    public void searchEmployeeByName(String name) throws Exception {
+
+        String sql =
+            "SELECT EMP_ID, NAME, EMAIL FROM EMPLOYEE " +
+            "WHERE LOWER(NAME) LIKE ?";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setString(1, "%" + name.toLowerCase() + "%");
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            System.out.println(
+                rs.getInt(1) + " | " +
+                rs.getString(2) + " | " +
+                rs.getString(3)
+            );
+        }
+    }
+}

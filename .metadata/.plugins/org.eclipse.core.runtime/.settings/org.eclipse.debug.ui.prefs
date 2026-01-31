@@ -1,4 +1,5 @@
-#Thu Jan 22 12:57:42 IST 2026
+#Thu Jan 29 15:35:30 IST 2026
 eclipse.preferences.version=1
 preferredTargets=default\:default|
 org.eclipse.debug.ui.PREF_LAUNCH_PERSPECTIVES=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<launchPerspectives/>\r\n
+org.eclipse.debug.ui.save_dirty_editors_before_launch=always

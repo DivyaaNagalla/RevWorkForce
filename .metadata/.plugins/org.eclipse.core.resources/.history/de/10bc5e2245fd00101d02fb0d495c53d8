@@ -1,0 +1,36 @@
+package com.revworkforce.dao;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import com.revworkforce.util.DBUtil;
+
+public class LeaveDAO {
+
+    public void viewTeamLeaveRequests(int managerId) throws Exception {
+
+        String sql =
+            "SELECT L.LEAVE_ID, E.NAME, L.START_DATE, L.END_DATE, L.STATUS " +
+            "FROM LEAVE_APPLICATION L " +
+            "JOIN EMPLOYEE E ON L.EMP_ID = E.EMP_ID " +
+            "WHERE E.MANAGER_ID = ? AND L.STATUS = 'PENDING'";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, managerId);
+        ResultSet rs = ps.executeQuery();
+
+        boolean found = false;
+        System.out.println("\n--- Pending Leave Requests ---");
+
+        while (rs.next()) {
+            found = true;
+            System.out.println(
+                rs.getInt("LEAVE_ID") + " | " +
+                rs.getString("NAME") + " | " +
+                rs.getDate("START_DATE") + " to " +
+                rs.getDate("END_DATE") + " | " +
+                rs.getString("STATUS")
+            );
+       

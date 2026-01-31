@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.revworkforce.util.EmailValidator"/>
+<fullyQualifiedTypeName name="com.revworkforce.util.DOBValidator"/>
+<fullyQualifiedTypeName name="com.revworkforce.service.EmployeeService"/>
+<fullyQualifiedTypeName name="com.revworkforce.service.PerformanceService"/>
+<fullyQualifiedTypeName name="com.revworkforce.service.NotificationService"/>
+<fullyQualifiedTypeName name="com.revworkforce.service.LeaveService"/>
+<fullyQualifiedTypeName name="com.revworkforce.service.LeaveAdminService"/>
+<fullyQualifiedTypeName name="com.revworkforce.service.AdminConfigService"/>
+</qualifiedTypeNameHistroy>

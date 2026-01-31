@@ -1,0 +1,40 @@
+package com.revworkforce.service;
+
+import java.sql.Date;
+import com.revworkforce.dao.EmployeeDAO;
+import com.revworkforce.util.DOBValidator;
+import com.revworkforce.util.EmailValidator;
+import com.revworkforce.util.PasswordGenerator;
+
+public class EmployeeService {
+
+    private EmployeeDAO dao = new EmployeeDAO();
+
+    public void addEmployee(String name,
+                            String email,
+                            Date dob) throws Exception {
+
+        EmailValidator.validate(email);
+        DOBValidator.validate(dob);
+
+        String tempPwd = PasswordGenerator.generateTempPassword();
+        int empId = dao.addEmployee(name, email, dob, tempPwd);
+
+        System.out.println("\n--- Employee Created ---");
+        System.out.println("Employee ID   : " + empId);
+        System.out.println("Temp Password : " + tempPwd);
+    }
+
+    public void assignManager(int empId,
+                              int managerId) throws Exception {
+
+        if (empId == managerId) {
+            throw new Exception(
+                "Employee cannot be his own manager"
+            );
+        }
+
+        dao.assignManager(empId, managerId);
+        System.out.println("Manager assigned successfully");
+    }
+}

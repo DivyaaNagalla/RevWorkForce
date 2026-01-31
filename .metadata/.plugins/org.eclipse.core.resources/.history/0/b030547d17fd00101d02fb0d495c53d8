@@ -1,0 +1,49 @@
+package com.revworkforce.service;
+
+import java.sql.ResultSet;
+
+import com.revworkforce.dao.NotificationDAO;
+
+public class NotificationService {
+
+    private NotificationDAO dao = new NotificationDAO();
+
+    public void viewNotifications(int empId) throws Exception {
+
+        ResultSet rs = dao.getNotifications(empId);
+        boolean found = false;
+
+        System.out.println("\n--- Notifications ---");
+
+        while (rs.next()) {
+            found = true;
+            System.out.println(
+                rs.getString("MESSAGE") + " | " +
+                rs.getTimestamp("CREATED_AT")
+            );
+        }
+
+        if (!found) {
+            System.out.println("No notifications");
+        }
+
+        dao.markAsRead(empId);
+    }
+
+    public void showUnreadOnLogin(int empId) throws Exception {
+
+        ResultSet rs = dao.getUnreadNotifications(empId);
+        boolean found = false;
+
+        System.out.println("\n--- New Notifications ---");
+
+        while (rs.next()) {
+            found = true;
+            System.out.println("- " + rs.getString("MESSAGE"));
+        }
+
+        if (!found) {
+            System.out.println("No new notifications");
+        }
+    }
+}

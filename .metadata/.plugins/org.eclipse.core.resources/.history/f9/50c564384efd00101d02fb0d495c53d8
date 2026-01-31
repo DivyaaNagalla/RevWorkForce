@@ -1,0 +1,84 @@
+package com.revworkforce.service;
+
+import java.sql.Date;
+import com.revworkforce.dao.EmployeeDAO;
+import com.revworkforce.model.Employee;
+import com.revworkforce.util.*;
+
+public class EmployeeService {
+
+    private EmployeeDAO dao = new EmployeeDAO();
+
+    public Employee login(int empId, String pwd) throws Exception {
+        Employee emp = dao.login(empId, pwd);
+
+        if (emp == null)
+            throw new Exception("Invalid Employee ID or Password");
+
+        if (!"ACTIVE".equalsIgnoreCase(emp.getStatus()))
+            throw new Exception("Account inactive");
+
+        return emp;
+    }
+
+    public void changePassword(int empId,
+                               String newPwd,
+                               String confirmPwd) throws Exception {
+
+        if (!newPwd.equals(confirmPwd))
+            throw new Exception("Passwords do not match");
+
+        PasswordValidator.validate(newPwd);
+        dao.updatePassword(empId, newPwd);
+    }
+
+    public void addEmployee(String name,
+                            String email,
+                            Date dob) throws Exception {
+
+        EmailValidator.validate(email);
+        DOBValidator.validate(dob);
+
+        String tempPwd = PasswordGenerator.generateTempPassword();
+        int empId = dao.addEmployee(name, email, dob, tempPwd);
+
+        System.out.println("\n--- Employee Created ---");
+        System.out.println("Employee ID   : " + empId);
+        System.out.println("Temp Password : " + tempPwd);
+    }
+
+    public void assignManager(int empId, int managerId) throws Exception {
+        dao.assignManager(empId, managerId);
+        System.out.println("Manager assigned successfully");
+    }
+
+    public void updateProfile(int empId,
+                              String phone,
+                              String address,
+                              String emergency) throws Exception {
+
+        if (!phone.matches("\\d{10}"))
+            throw new Exception("Invalid phone number");
+
+        if (!emergency.matches("\\d{10}"))
+            throw new Exception("Invalid emergency contact");
+
+        dao.updateProfile(empId, phone, address, emergency);
+    }
+
+    public void viewMyTeam(int managerId) throws Exception {
+        dao.viewMyTeam(managerId);
+    }
+
+    public void viewBirthdays() throws Exception {
+        dao.viewUpcomingBirthdays();
+    }
+
+    public void viewAnniversaries() throws Exception {
+        dao.viewWorkAnniversaries();
+    }
+
+    public void viewEmployeeDirectory() throws Exception {
+        dao.viewEmployeeDirectory();
+    }
+}

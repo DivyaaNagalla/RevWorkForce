@@ -1,0 +1,19 @@
+package com.revworkforce.service;
+
+import com.revworkforce.dao.NotificationDAO;
+
+public class NotificationService {
+
+    private NotificationDAO dao = new NotificationDAO();
+
+    public void showUnreadCount(int empId) throws Exception {
+        int count = dao.getUnreadCount(empId);
+        if (count > 0) {
+            System.out.println(" You have " + count + " unread notifications");
+        }
+    }
+
+    public void viewNotifications(int empId) throws Exception {
+        dao.viewNotifications(empId);
+    }
+}

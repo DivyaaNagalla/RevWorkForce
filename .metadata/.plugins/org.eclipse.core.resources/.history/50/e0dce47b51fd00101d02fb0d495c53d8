@@ -1,0 +1,201 @@
+package com.revworkforce.dao;
+
+import java.sql.*;
+import com.revworkforce.util.DBUtil;
+
+public class PerformanceDAO {
+
+    public void createReview(int empId,
+                             int year,
+                             String deliverables,
+                             String achievements,
+                             String improvements,
+                             int selfRating) throws Exception {
+
+        String sql =
+            "INSERT INTO PERFORMANCE_REVIEW " +
+            "(REVIEW_ID, EMP_ID, REVIEW_YEAR, KEY_DELIVERABLES, " +
+            "MAJOR_ACCOMPLISHMENTS, AREAS_OF_IMPROVEMENT, SELF_RATING) " +
+            "VALUES (REVIEW_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, empId);
+        ps.setInt(2, year);
+        ps.setString(3, deliverables);
+        ps.setString(4, achievements);
+        ps.setString(5, improvements);
+        ps.setInt(6, selfRating);
+        ps.executeUpdate();
+    }
+
+    public int getLatestReviewId(int empId) throws Exception {
+
+        String sql =
+            "SELECT MAX(REVIEW_ID) FROM PERFORMANCE_REVIEW WHERE EMP_ID=?";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, empId);
+
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return rs.getInt(1);
+    }
+
+   
+    public void createGoal(int reviewId,
+                           String desc,
+                           Date deadline,
+                           String priority,
+                           String metrics) throws Exception {
+
+        String sql =
+            "INSERT INTO GOALS " +
+            "(GOAL_ID, REVIEW_ID, DESCRIPTION, DEADLINE, PRIORITY, SUCCESS_METRICS, PROGRESS, STATUS) " +
+            "VALUES (GOAL_SEQ.NEXTVAL, ?, ?, ?, ?, ?, 0, 'IN_PROGRESS')";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, reviewId);
+        ps.setString(2, desc);
+        ps.setDate(3, deadline);
+        ps.setString(4, priority);
+        ps.setString(5, metrics);
+        ps.executeUpdate();
+    }
+
+    public void viewMyGoals(int empId) throws Exception {
+
+        String sql =
+            "SELECT G.GOAL_ID, G.DESCRIPTION, G.PROGRESS, G.STATUS " +
+            "FROM GOALS G JOIN PERFORMANCE_REVIEW R " +
+            "ON G.REVIEW_ID = R.REVIEW_ID " +
+            "WHERE R.EMP_ID = ?";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, empId);
+
+        ResultSet rs = ps.executeQuery();
+        System.out.println("\n--- My Goals ---");
+
+        while (rs.next()) {
+            System.out.println(
+                rs.getInt("GOAL_ID") + " | " +
+                rs.getString("DESCRIPTION") + " | " +
+                rs.getInt("PROGRESS") + "% | " +
+                rs.getString("STATUS")
+            );
+        }
+    }
+
+    public void updateGoalProgress(int goalId, int progress) throws Exception {
+
+        String status = (progress == 100) ? "COMPLETED" : "IN_PROGRESS";
+
+        String sql =
+            "UPDATE GOALS SET PROGRESS=?, STATUS=? WHERE GOAL_ID=?";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, progress);
+        ps.setString(2, status);
+        ps.setInt(3, goalId);
+        ps.executeUpdate();
+    }
+
+   
+    public void viewManagerFeedback(int empId) throws Exception {
+
+        String sql =
+            "SELECT REVIEW_YEAR, MANAGER_RATING, MANAGER_FEEDBACK " +
+            "FROM PERFORMANCE_REVIEW WHERE EMP_ID=?";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, empId);
+
+        ResultSet rs = ps.executeQuery();
+        System.out.println("\n--- Manager Feedback ---");
+
+        while (rs.next()) {
+            System.out.println(
+                "Year: " + rs.getInt("REVIEW_YEAR") +
+                ", Rating: " + rs.getInt("MANAGER_RATING") +
+                ", Feedback: " + rs.getString("MANAGER_FEEDBACK")
+            );
+        }
+  
+        public void viewTeamGoals(int managerId) throws Exception {
+
+            String sql =
+                "SELECT G.GOAL_ID, E.NAME, G.DESCRIPTION, G.PROGRESS, G.STATUS " +
+                "FROM GOALS G " +
+                "JOIN PERFORMANCE_REVIEW R ON G.REVIEW_ID = R.REVIEW_ID " +
+                "JOIN EMPLOYEE E ON R.EMP_ID = E.EMP_ID " +
+                "WHERE E.MANAGER_ID = ?";
+
+            PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+            ps.setInt(1, managerId);
+
+            ResultSet rs = ps.executeQuery();
+
+            System.out.println("\n--- Team Goals ---");
+
+            boolean found = false;
+            while (rs.next()) {
+                found = true;
+                System.out.println(
+                    "Goal ID: " + rs.getInt("GOAL_ID") +
+                    " | Emp: " + rs.getString("NAME") +
+                    " | Progress: " + rs.getInt("PROGRESS") + "%" +
+                    " | Status: " + rs.getString("STATUS")
+                );
+            }
+
+            if (!found)
+                System.out.println("No goals found");
+        }
+
+      
+        public void approveOrRejectGoal(int goalId,
+                                        String status) throws Exception {
+
+            String sql =
+                "UPDATE GOALS SET STATUS = ? WHERE GOAL_ID = ?";
+
+            PreparedStatement ps =
+                DBUtil.getConnection().prepareStatement(sql);
+
+            ps.setString(1, status);
+            ps.setInt(2, goalId);
+            ps.executeUpdate();
+        }
+        public void notifyGoalCompletion(int goalId) throws Exception {
+
+            String sql =
+                "SELECT R.EMP_ID " +
+                "FROM GOALS G JOIN PERFORMANCE_REVIEW R " +
+                "ON G.REVIEW_ID = R.REVIEW_ID " +
+                "WHERE G.GOAL_ID = ?";
+
+            PreparedStatement ps =
+                DBUtil.getConnection().prepareStatement(sql);
+
+            ps.setInt(1, goalId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int empId = rs.getInt("EMP_ID");
+
+                PreparedStatement ins =
+                    DBUtil.getConnection().prepareStatement(
+                        "INSERT INTO NOTIFICATION " +
+                        "(NOTIF_ID, EMP_ID, MESSAGE, IS_READ, CREATED_DATE) " +
+                        "VALUES (NOTIF_SEQ.NEXTVAL, ?, ?, 'N', SYSDATE)"
+                    );
+
+                ins.setInt(1, empId);
+                ins.setString(2, "Goal completed successfully!");
+                ins.executeUpdate();
+            }
+        }
+
+    }
+    
+}

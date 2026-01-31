@@ -1,0 +1,127 @@
+package com.revworkforce.dao;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import com.revworkforce.util.DBUtil;
+
+public class PerformanceDAO {
+
+  
+    public void createReview(int empId,
+                             int year,
+                             String deliverables,
+                             String achievements,
+                             String improvements,
+                             int selfRating) throws Exception {
+
+        String sql =
+            "INSERT INTO PERFORMANCE_REVIEW " +
+            "(REVIEW_ID, EMP_ID, REVIEW_YEAR, " +
+            "KEY_DELIVERABLES, MAJOR_ACCOMPLISHMENTS, " +
+            "AREAS_OF_IMPROVEMENT, SELF_RATING) " +
+            "VALUES (REVIEW_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, empId);
+        ps.setInt(2, year);
+        ps.setString(3, deliverables);
+        ps.setString(4, achievements);
+        ps.setString(5, improvements);
+        ps.setInt(6, selfRating);
+
+        ps.executeUpdate();
+    }
+
+ 
+    public void viewMyReviews(int empId) throws Exception {
+
+        String sql =
+            "SELECT REVIEW_ID, REVIEW_YEAR, SELF_RATING, MANAGER_RATING " +
+            "FROM PERFORMANCE_REVIEW " +
+            "WHERE EMP_ID = ? " +
+            "ORDER BY REVIEW_YEAR DESC";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, empId);
+        ResultSet rs = ps.executeQuery();
+
+        boolean found = false;
+
+        System.out.println("\n--- My Performance Reviews ---");
+
+        while (rs.next()) {
+            found = true;
+            System.out.println(
+                "Review ID: " + rs.getInt("REVIEW_ID") +
+                ", Year: " + rs.getInt("REVIEW_YEAR") +
+                ", Self Rating: " + rs.getInt("SELF_RATING") +
+                ", Manager Rating: " + rs.getInt("MANAGER_RATING")
+            );
+        }
+
+        if (!found) {
+            System.out.println("No performance reviews found");
+        }
+    }
+
+
+    public void viewTeamReviews(int managerId) throws Exception {
+
+        String sql =
+            "SELECT R.REVIEW_ID, E.EMP_ID, E.NAME, R.REVIEW_YEAR, R.SELF_RATING " +
+            "FROM PERFORMANCE_REVIEW R " +
+            "JOIN EMPLOYEE E ON R.EMP_ID = E.EMP_ID " +
+            "WHERE E.MANAGER_ID = ? " +
+            "ORDER BY R.REVIEW_YEAR DESC";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, managerId);
+        ResultSet rs = ps.executeQuery();
+
+        boolean found = false;
+
+        System.out.println("\n--- Team Performance Reviews ---");
+
+        while (rs.next()) {
+            found = true;
+            System.out.println(
+                "Review ID: " + rs.getInt("REVIEW_ID") +
+                ", Emp ID: " + rs.getInt("EMP_ID") +
+                ", Name: " + rs.getString("NAME") +
+                ", Year: " + rs.getInt("REVIEW_YEAR") +
+                ", Self Rating: " + rs.getInt("SELF_RATING")
+            );
+        }
+
+        if (!found) {
+            System.out.println("No team reviews found");
+        }
+    }
+
+  
+    public void giveManagerFeedback(int reviewId,
+                                    int rating,
+                                    String feedback) throws Exception {
+
+        String sql =
+            "UPDATE PERFORMANCE_REVIEW " +
+            "SET MANAGER_RATING = ?, MANAGER_FEEDBACK = ? " +
+            "WHERE REVIEW_ID = ?";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, rating);
+        ps.setString(2, feedback);
+        ps.setInt(3, reviewId);
+
+        ps.executeUpdate();
+    }
+}

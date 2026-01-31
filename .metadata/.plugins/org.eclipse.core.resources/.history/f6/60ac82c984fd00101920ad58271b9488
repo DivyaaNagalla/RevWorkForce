@@ -1,0 +1,62 @@
+package com.revworkforce.service;
+
+import java.sql.Date;
+import com.revworkforce.dao.PerformanceDAO;
+
+public class PerformanceService {
+
+    private PerformanceDAO dao = new PerformanceDAO();
+
+   
+    public void submitReview(int empId, int year,
+                             String deliverables,
+                             String achievements,
+                             String improvements,
+                             int rating) throws Exception {
+
+        if (rating < 1 || rating > 5)
+            throw new Exception("Rating must be 1–5");
+
+        dao.createReview(empId, year, deliverables, achievements, improvements, rating);
+        System.out.println("Performance review submitted");
+    }
+
+    public void viewMyReviews(int empId) throws Exception {
+        dao.viewMyReviews(empId);
+    }
+
+    public void createGoal(int empId, String desc, Date deadline,
+                           String priority, String metrics) throws Exception {
+
+        dao.createGoal(empId, desc, deadline, priority, metrics);
+        System.out.println("Goal created successfully");
+    }
+
+    public void viewMyGoals(int empId) throws Exception {
+        dao.viewMyGoals(empId);
+    }
+
+    public void updateGoalProgress(int goalId, String progress) throws Exception {
+        dao.updateGoalProgress(goalId, progress);
+        System.out.println("Goal progress updated");
+    }
+
+    public void viewManagerFeedback(int empId) throws Exception {
+        dao.viewManagerFeedback(empId);
+    }
+
+ 
+    public void viewTeamReviews(int managerId) throws Exception {
+        dao.viewTeamReviews(managerId);
+    }
+
+    public void giveManagerFeedback(int reviewId, int rating, String feedback)
+            throws Exception {
+
+        if (rating < 1 || rating > 5)
+            throw new Exception("Rating must be 1–5");
+
+        dao.giveManagerFeedback(reviewId, rating, feedback);
+        System.out.println("Feedback submitted");
+    }
+}

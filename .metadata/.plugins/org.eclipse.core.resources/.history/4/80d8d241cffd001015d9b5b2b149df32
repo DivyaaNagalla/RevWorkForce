@@ -1,0 +1,46 @@
+package com.revwokforce.test;
+
+package com.revworkforce.service;
+
+import static org.mockito.Mockito.*;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.revworkforce.dao.NotificationDAO;
+
+public class NotificationServiceTest {
+
+    @Mock
+    private NotificationDAO notificationDAO;
+
+    private NotificationService notificationService;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        notificationService = new NotificationService(notificationDAO);
+    }
+
+    // ================= NOTIFY EMPLOYEE =================
+
+    @Test
+    public void testNotifyEmployee() throws Exception {
+
+        notificationService.notifyEmployee(101, "Welcome to RevWorkforce");
+
+        verify(notificationDAO).addNotification(101, "Welcome to RevWorkforce");
+    }
+
+    // ================= SHOW UNREAD =================
+
+    @Test
+    public void testShowUnreadOnLogin() throws Exception {
+
+        notificationService.showUnreadOnLogin(101);
+
+        verify(notificationDAO).showUnreadNotifications(101);
+    }
+}

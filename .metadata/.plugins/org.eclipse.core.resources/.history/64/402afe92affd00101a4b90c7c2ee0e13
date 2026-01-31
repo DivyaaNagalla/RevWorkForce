@@ -1,0 +1,43 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+
+import com.revworkforce.model.Employee;
+import com.revworkforce.service.EmployeeService;
+
+public class EmployeeProfileUI {
+
+    private static EmployeeService service = new EmployeeService();
+
+    public static void viewProfile(Employee emp) {
+
+        System.out.println("\n--- My Profile ---");
+        System.out.println("ID       : " + emp.getEmpId());
+        System.out.println("Name     : " + emp.getName());
+        System.out.println("Email    : " + emp.getEmail());
+        System.out.println("Phone    : " + emp.getPhone());
+        System.out.println("Address  : " + emp.getAddress());
+        System.out.println("Manager  : " + emp.getManagerName());
+    }
+
+    public static Employee updateProfile(Employee emp) throws Exception {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Phone Number       : ");
+        String phone = sc.nextLine();
+
+        System.out.print("Address            : ");
+        String address = sc.nextLine();
+
+        System.out.print("Emergency Contact  : ");
+        String emergency = sc.nextLine();
+
+        Employee updatedEmp =
+                service.updateProfile(emp.getEmpId(), phone, address, emergency);
+
+        System.out.println("Profile updated successfully");
+
+        return updatedEmp; 
+    }
+}

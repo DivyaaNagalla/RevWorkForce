@@ -1,0 +1,34 @@
+package com.revworkforce.service;
+
+import com.revworkforce.dao.PerformanceDAO;
+
+public class PerformanceService {
+
+    private PerformanceDAO dao = new PerformanceDAO();
+
+    public void createPerformanceReview(int empId,
+                                        int year,
+                                        String del,
+                                        String ach,
+                                        String imp,
+                                        int rating) throws Exception {
+
+        dao.createReview(empId, year, del, ach, imp, rating);
+        System.out.println("Performance review submitted successfully");
+    }
+    public void viewTeamReviews(int managerId) throws Exception {
+        dao.viewTeamReviews(managerId);
+    }
+    public void giveManagerFeedback(int reviewId,
+            int rating,
+            String feedback) throws Exception {
+
+if (rating < 1 || rating > 5) {
+throw new Exception("Rating must be between 1 and 5");
+}
+
+dao.giveManagerFeedback(reviewId, rating, feedback);
+System.out.println("Manager feedback submitted successfully");
+}
+
+}

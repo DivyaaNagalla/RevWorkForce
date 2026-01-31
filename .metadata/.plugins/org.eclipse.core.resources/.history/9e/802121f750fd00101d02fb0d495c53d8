@@ -1,0 +1,69 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+import com.revworkforce.service.PerformanceService;
+
+public class EmployeePerformanceUI {
+
+    public static void showMenu(int empId) {
+
+        Scanner sc = new Scanner(System.in);
+        PerformanceService service = new PerformanceService();
+
+        while (true) {
+
+            System.out.println("\n--- Performance Management ---");
+            System.out.println("1. Create Performance Review");
+            System.out.println("2. View My Reviews");
+            System.out.println("3. Back");
+            System.out.print("Choose option: ");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            try {
+                switch (choice) {
+
+                    case 1:
+                        System.out.print("Review Year: ");
+                        int year = sc.nextInt();
+                        sc.nextLine();
+
+                        System.out.print("Key Deliverables: ");
+                        String deliverables = sc.nextLine();
+
+                        System.out.print("Major Accomplishments: ");
+                        String achievements = sc.nextLine();
+
+                        System.out.print("Areas of Improvement: ");
+                        String improvements = sc.nextLine();
+
+                        System.out.print("Self Rating (1-5): ");
+                        int rating = sc.nextInt();
+                        sc.nextLine();
+
+                        service.submitReview(empId,
+                                             year,
+                                             deliverables,
+                                             achievements,
+                                             improvements,
+                                             rating);
+                        break;
+
+                    case 2:
+                        service.viewMyReviews(empId);
+                        break;
+
+                    case 3:
+                        return;
+
+                    default:
+                        System.out.println("Invalid option");
+                }
+
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+}

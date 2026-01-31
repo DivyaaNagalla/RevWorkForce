@@ -1,0 +1,61 @@
+package com.revworkforce.service;
+
+import java.sql.Date;
+import java.util.Scanner;
+
+import com.revworkforce.dao.LeaveDAO;
+
+public class LeaveService {
+
+    private LeaveDAO dao = new LeaveDAO();
+
+    public void viewLeaveBalance(int empId) throws Exception {
+        dao.viewLeaveBalance(empId);
+    }
+
+    public void applyLeave(int empId) throws Exception {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Leave Type ID: ");
+        int leaveTypeId = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("Start Date (yyyy-mm-dd): ");
+        Date startDate = Date.valueOf(sc.nextLine());
+
+        System.out.print("End Date (yyyy-mm-dd): ");
+        Date endDate = Date.valueOf(sc.nextLine());
+
+        System.out.print("Reason: ");
+        String reason = sc.nextLine();
+
+        dao.applyLeave(empId, leaveTypeId, startDate, endDate, reason);
+
+        System.out.println("Leave applied successfully");
+    }
+
+    public void viewMyLeaves(int empId) throws Exception {
+        dao.viewMyLeaves(empId);
+    }
+
+    public void viewHolidays() throws Exception {
+        dao.viewHolidays();
+    }
+
+    public void viewTeamLeaveRequests(int managerId) throws Exception {
+        dao.viewTeamLeaveRequests(managerId);
+    }
+
+    public void approveLeave(int leaveId, String comment) throws Exception {
+        dao.approveOrRejectLeave(leaveId, "APPROVED", comment);
+    }
+
+    public void rejectLeave(int leaveId, String comment) throws Exception {
+        dao.approveOrRejectLeave(leaveId, "REJECTED", comment);
+    }
+
+    public void viewTeamLeaveCalendar(int managerId) throws Exception {
+        dao.viewTeamLeaveCalendar(managerId);
+    }
+}

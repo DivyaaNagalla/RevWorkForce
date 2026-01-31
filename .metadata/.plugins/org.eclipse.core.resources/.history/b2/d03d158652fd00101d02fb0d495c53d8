@@ -1,0 +1,78 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+import com.revworkforce.service.PerformanceService;
+
+public class ManagerPerformanceUI {
+
+    public static void showMenu(int managerId) {
+
+        Scanner sc = new Scanner(System.in);
+        PerformanceService service = new PerformanceService();
+
+        while (true) {
+
+            System.out.println("\n--- Manager Performance ---");
+            System.out.println("1. View Team Performance Reviews");
+            System.out.println("2. Give Review Rating & Feedback");
+            System.out.println("3. View Team Goals");
+            System.out.println("4. Approve Goal");
+            System.out.println("5. Reject Goal");
+            System.out.println("6. Back");
+            System.out.print("Choose option: ");
+
+            int ch = sc.nextInt();
+            sc.nextLine();
+
+            try {
+                switch (ch) {
+
+                    case 1:
+                        service.viewTeamReviews(managerId);
+                        break;
+
+                    case 2:
+                        System.out.print("Review ID: ");
+                        int reviewId = sc.nextInt();
+                        sc.nextLine();
+
+                        System.out.print("Rating (1-5): ");
+                        int rating = sc.nextInt();
+                        sc.nextLine();
+
+                        System.out.print("Feedback: ");
+                        String fb = sc.nextLine();
+
+                        service.giveManagerFeedback(reviewId, rating, fb);
+                        System.out.println("Feedback submitted successfully");
+                        break;
+
+                    case 3:
+                        service.viewTeamGoals(managerId);
+                        break;
+
+                    case 4:
+                        System.out.print("Goal ID: ");
+                        int gA = sc.nextInt();
+                        service.approveGoal(gA);
+                        break;
+
+                    case 5:
+                        System.out.print("Goal ID: ");
+                        int gR = sc.nextInt();
+                        service.rejectGoal(gR);
+                        break;
+
+                    case 6:
+                        return;
+
+                    default:
+                        System.out.println("Invalid option");
+                }
+
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+}

@@ -1,0 +1,17 @@
+package com.revworkforce.ui;
+
+import com.revworkforce.service.NotificationService;
+
+public class NotificationUI {
+
+    public static void viewNotifications(int empId) {
+
+        NotificationService service = new NotificationService();
+
+        try {
+            service.viewNotifications(empId);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}

@@ -1,0 +1,57 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+
+import com.revworkforce.model.Employee;
+import com.revworkforce.service.EmployeeService;
+
+public class LoginUI {
+
+    public static Employee login() {
+
+        Scanner sc = new Scanner(System.in);
+        EmployeeService service = new EmployeeService();
+
+        System.out.println("\n1. Login");
+        System.out.println("2. Forgot Password (Security Questions)");
+        System.out.print("Choose option: ");
+
+        int option = sc.nextInt();
+        sc.nextLine();
+
+        try {
+
+            if (option == 1) {
+
+                System.out.print("Enter Employee ID: ");
+                int empId = sc.nextInt();
+                sc.nextLine();
+
+                System.out.print("Enter Password: ");
+                String pwd = sc.nextLine();
+
+                return service.login(empId, pwd);
+            }
+
+            else if (option == 2) {
+
+                System.out.print("Employee ID: ");
+                int empId = sc.nextInt();
+                sc.nextLine();
+
+                System.out.print("Answer 1: ");
+                String a1 = sc.nextLine();
+
+                System.out.print("Answer 2: ");
+                String a2 = sc.nextLine();
+
+                service.forgotPasswordWithSecurity(empId, a1, a2);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return null;
+    }
+}

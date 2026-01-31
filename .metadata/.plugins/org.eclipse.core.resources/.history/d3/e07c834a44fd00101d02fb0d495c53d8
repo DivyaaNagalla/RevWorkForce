@@ -1,0 +1,52 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+
+import com.revworkforce.service.LeaveService;
+
+public class ManagerLeaveUI {
+
+    public static void showMenu(int managerId) {
+
+        Scanner sc = new Scanner(System.in);
+        LeaveService leaveService = new LeaveService();
+
+        while (true) {
+
+            System.out.println("\n--- Manager Leave Management ---");
+            System.out.println("1. View Team Leave Requests");
+            System.out.println("2. Approve / Reject Leave");
+            System.out.println("3. View Team Leave Calendar");
+            System.out.println("4. Back");
+            System.out.print("Choose option: ");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            try {
+
+                switch (choice) {
+
+                    case 1:
+                        leaveService.viewTeamLeaveRequests(managerId);
+                        break;
+
+                    case 2:
+                        leaveService.viewTeamLeaveRequests(managerId);
+
+                        System.out.print("\nEnter Leave ID: ");
+                        int leaveId = sc.nextInt();
+                        sc.nextLine();
+
+                        System.out.print("Approve or Reject (A/R): ");
+                        String decision = sc.nextLine();
+
+                        System.out.print("Manager Comment: ");
+                        String comment = sc.nextLine();
+
+                        if (decision.equalsIgnoreCase("A")) {
+                            leaveService.approveLeave(leaveId, comment);
+                            System.out.println("Leave approved successfully");
+                        } else if (decision.equalsIgnoreCase("R")) {
+                            leaveService.rejectLeave(leaveId, comment);
+                            System.out.println

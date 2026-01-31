@@ -1,0 +1,98 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+
+import com.revworkforce.model.Employee;
+
+public class EmployeeMenuUI {
+
+    public static void showMenu(Employee emp, boolean isManager) {
+
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+
+            System.out.println("\n--- Employee Menu ---");
+            System.out.println("1. View Profile");
+            System.out.println("2. Update Profile");
+            System.out.println("3. Leave Management");
+            System.out.println("4. Performance Management");
+            System.out.println("5. Additional Details");
+
+            if (isManager) {
+                System.out.println("6. Manager Leave Management");
+                System.out.println("7. Logout");
+            } else {
+                System.out.println("6. Logout");
+            }
+
+            System.out.print("Choose option: ");
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            if (!isManager) {
+                switch (choice) {
+
+                    case 1:
+                        EmployeeProfileUI.viewProfile(emp);
+                        break;
+
+                    case 2:
+                        EmployeeProfileUI.updateProfile(emp.getEmpId());
+                        break;
+
+                    case 3:
+                        EmployeeLeaveUI.showMenu(emp.getEmpId());
+                        break;
+
+                    case 4:
+                        PerformanceUI.showMenu(emp.getEmpId());
+                        break;
+
+                    case 5:
+                        AdditionalDetailsUI.showMenu();
+                        break;
+
+                    case 6:
+                        return;
+
+                    default:
+                        System.out.println("Invalid option");
+                }
+            } else {
+                switch (choice) {
+
+                    case 1:
+                        EmployeeProfileUI.viewProfile(emp);
+                        break;
+
+                    case 2:
+                        EmployeeProfileUI.updateProfile(emp.getEmpId());
+                        break;
+
+                    case 3:
+                        EmployeeLeaveUI.showMenu(emp.getEmpId());
+                        break;
+
+                    case 4:
+                        PerformanceUI.showMenu(emp.getEmpId());
+                        break;
+
+                    case 5:
+                        AdditionalDetailsUI.showMenu();
+                        break;
+
+                    case 6:
+                        ManagerLeaveUI.showMenu(emp.getEmpId());
+                        break;
+
+                    case 7:
+                        return;
+
+                    default:
+                        System.out.println("Invalid option");
+                }
+            }
+        }
+    }
+}

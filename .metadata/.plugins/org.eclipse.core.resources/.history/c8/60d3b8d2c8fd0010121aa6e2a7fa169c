@@ -1,0 +1,34 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+import java.sql.Date;
+
+import com.revworkforce.service.EmployeeService;
+
+public class AddEmployeeUI {
+
+    public static void addEmployee() {
+
+        Scanner sc = new Scanner(System.in);
+        EmployeeService service = new EmployeeService();
+
+        try {
+            System.out.println("\n--- Add Employee ---");
+
+            System.out.print("Name : ");
+            String name = sc.nextLine();
+
+            System.out.print("Email : ");
+            String email = sc.nextLine();
+
+            System.out.print("DOB (yyyy-mm-dd): ");
+            String dobStr = sc.nextLine();
+            Date dob = Date.valueOf(dobStr);
+
+            service.addEmployee(name, email, dob);
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}

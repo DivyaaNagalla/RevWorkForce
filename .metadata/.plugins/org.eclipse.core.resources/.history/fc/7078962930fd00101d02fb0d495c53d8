@@ -1,0 +1,49 @@
+package com.revworkforce.service;
+
+import java.sql.ResultSet;
+import com.revworkforce.dao.PerformanceDAO;
+
+public class PerformanceService {
+
+    private PerformanceDAO dao = new PerformanceDAO();
+
+    public void submitReview(int empId, int year,
+                             String kd, String acc,
+                             String imp, int rating) throws Exception {
+
+        if (rating < 1 || rating > 5)
+            throw new Exception("Rating must be 1 to 5");
+
+        dao.createReview(empId, year, kd, acc, imp, rating);
+        System.out.println("Performance review submitted");
+    }
+
+    public void viewMyReviews(int empId) throws Exception {
+
+        ResultSet rs = dao.getMyReviews(empId);
+        boolean found = false;
+
+        System.out.println("\n--- My Performance Reviews ---");
+
+        while (rs.next()) {
+            found = true;
+            System.out.println(
+                rs.getInt("REVIEW_YEAR") + " | " +
+                rs.getString("STATUS") + " | Rating: " +
+                rs.getInt("SELF_RATING")
+            );
+
+            String fb = rs.getString("MANAGER_FEEDBACK");
+            if (fb != null)
+                System.out.println("Feedback: " + fb);
+        }
+
+        if (!found)
+            System.out.println("No reviews found");
+    }
+
+	public void updateGoalProgress(int gid, int prog) {
+		// TODO Auto-generated method stub
+		
+	}
+}

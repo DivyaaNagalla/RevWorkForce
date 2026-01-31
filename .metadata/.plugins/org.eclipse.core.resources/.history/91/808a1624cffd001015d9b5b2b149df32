@@ -1,0 +1,16 @@
+package com.revworkforce.service;
+
+import com.revworkforce.dao.NotificationDAO;
+
+public class NotificationService {
+
+    private NotificationDAO dao = new NotificationDAO();
+
+    public void notifyEmployee(int empId, String message) throws Exception {
+        dao.addNotification(empId, message);
+    }
+
+    public void showUnreadOnLogin(int empId) throws Exception {
+        dao.showUnreadNotifications(empId);
+    }
+}

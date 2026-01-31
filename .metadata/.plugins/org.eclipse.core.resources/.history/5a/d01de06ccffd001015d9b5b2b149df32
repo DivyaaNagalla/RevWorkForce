@@ -1,0 +1,54 @@
+package com.revworkforce.service;
+
+import java.sql.Date;
+
+import com.revworkforce.dao.LeaveDAO;
+
+public class LeaveService {
+
+    private LeaveDAO dao = new LeaveDAO();
+
+    public void viewLeaveBalance(int empId) throws Exception {
+        dao.viewLeaveBalance(empId);
+    }
+
+    public void applyLeave(int empId,
+                           int leaveTypeId,
+                           Date start,
+                           Date end,
+                           String reason) throws Exception {
+
+        if (end.before(start))
+            throw new Exception("End date cannot be before start date");
+
+        dao.applyLeave(empId, leaveTypeId, start, end, reason);
+        System.out.println("Leave applied successfully");
+    }
+
+    public void viewMyLeaves(int empId) throws Exception {
+        dao.viewMyLeaves(empId);
+    }
+
+    public void viewHolidays() throws Exception {
+        dao.viewHolidays();
+    }
+
+    public void cancelLeave(int leaveId, int empId) throws Exception {
+        dao.cancelLeave(leaveId, empId);
+        System.out.println("Leave cancelled");
+    }
+
+    // -------- MANAGER --------
+
+    public void viewTeamLeaveRequests(int managerId) throws Exception {
+        dao.viewTeamLeaveRequests(managerId);
+    }
+
+    public void approveLeave(int leaveId, String comment) throws Exception {
+        dao.approveOrRejectLeave(leaveId, "APPROVED", comment);
+    }
+
+    public void rejectLeave(int leaveId, String comment) throws Exception {
+        dao.approveOrRejectLeave(leaveId, "REJECTED", comment);
+    }
+}

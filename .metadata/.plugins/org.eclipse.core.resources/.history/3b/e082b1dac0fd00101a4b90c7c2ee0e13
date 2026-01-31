@@ -1,0 +1,44 @@
+package com.revworkforce.ui;
+
+import java.sql.ResultSet;
+import java.util.Scanner;
+
+import com.revworkforce.dao.EmployeeDAO;
+import com.revworkforce.service.EmployeeService;
+
+public class ForgotPasswordUI {
+
+    public static void forgotPassword() {
+
+        Scanner sc = new Scanner(System.in);
+        EmployeeDAO dao = new EmployeeDAO();
+        EmployeeService service = new EmployeeService();
+
+        try {
+            System.out.print("Employee ID: ");
+            int empId = sc.nextInt();
+            sc.nextLine();
+
+            ResultSet rs = dao.getSecurityQuestions(empId);
+
+            String[] answers = new String[2];
+            int i = 0;
+
+            while (rs.next() && i < 2) {
+                System.out.print(rs.getString("QUESTION") + " : ");
+                answers[i] = sc.nextLine();
+                i++;
+            }
+
+            if (i < 2) {
+                System.out.println("Security questions not configured");
+                return;
+            }
+
+            service.forgotPasswordWithSecurity(empId, answers[0], answers[1]);
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}

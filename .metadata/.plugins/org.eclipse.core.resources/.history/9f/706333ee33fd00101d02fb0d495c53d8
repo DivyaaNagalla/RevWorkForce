@@ -1,0 +1,75 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+import com.revworkforce.model.Employee;
+import com.revworkforce.service.EmployeeService;
+import com.revworkforce.service.PerformanceService;
+
+public class ManagerPerformanceUI {
+
+    public static void showMenu(Employee manager) {
+
+        Scanner sc = new Scanner(System.in);
+        EmployeeService empService = new EmployeeService();
+        PerformanceService perfService = new PerformanceService();
+
+        while (true) {
+            System.out.println("\n--- Manager Performance Menu ---");
+            System.out.println("1. View Team Reviews");
+            System.out.println("2. Give Feedback");
+            System.out.println("3. View Team Performance Summary");
+            System.out.println("4. Back");
+            System.out.print("Choose option: ");
+
+            int ch = sc.nextInt();
+            sc.nextLine();
+
+            try {
+                switch (ch) {
+                    case 1:
+                        perfService.viewTeamReviews(manager.getEmpId());
+                        break;
+
+                    case 2:
+                        int empId = empService.selectTeamMember(
+                            manager.getEmpId()
+                        );
+
+                        if (empId == -1) break;
+
+                        System.out.print("Review ID: ");
+                        int rid = sc.nextInt();
+                        sc.nextLine();
+
+                        System.out.print("Feedback: ");
+                        String fb = sc.nextLine();
+
+                        System.out.print("Rating (1-5): ");
+                        int rate = sc.nextInt();
+
+                        perfService.giveFeedback(
+                            rid, fb, rate
+                        );
+                        break;
+
+                    case 3:
+                        perfService.viewTeamPerformanceSummary(
+                            manager.getEmpId()
+                        );
+                        break;
+
+                    case 4:
+                        return;
+
+                    default:
+                        System.out.println("Invalid option");
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+
+            System.out.println("\nPress Enter to continue...");
+            sc.nextLine();
+        }
+    }
+}

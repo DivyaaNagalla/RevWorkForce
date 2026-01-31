@@ -1,0 +1,79 @@
+package com.revworkforce.ui;
+
+import java.util.Scanner;
+
+import com.revworkforce.model.Employee;
+import com.revworkforce.service.EmployeeService;
+import com.revworkforce.service.LeaveService;
+
+public class ManagerLeaveUI {
+
+    public static void showMenu(Employee emp) {
+
+        Scanner sc = new Scanner(System.in);
+        LeaveService leaveService = new LeaveService();
+        EmployeeService empService = new EmployeeService();
+
+        while (true) {
+
+            System.out.println("\n--- Manager Leave Menu ---");
+            System.out.println("1. View Team Leave Requests");
+            System.out.println("2. Approve / Reject Leave");
+            System.out.println("3. View Team Leave Calendar");
+            System.out.println("4. View Team Leave Balance");
+            System.out.println("5. View My Team");
+            System.out.println("6. Back");
+            System.out.print("Choose option: ");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            try {
+                switch (choice) {
+
+                    case 1:
+                        leaveService.viewTeamLeaveRequests(emp.getEmpId());
+                        break;
+
+                    case 2:
+                        System.out.print("Enter Leave ID: ");
+                        int leaveId = sc.nextInt();
+                        sc.nextLine();
+
+                        System.out.print("Approve or Reject (APPROVED/REJECTED): ");
+                        String status = sc.nextLine();
+
+                        System.out.print("Manager Comment: ");
+                        String comment = sc.nextLine();
+
+                        leaveService.approveOrRejectLeave(
+                            leaveId,
+                            status,
+                            comment
+                        );
+                        break;
+
+                    case 3:
+                        leaveService.viewTeamLeaveCalendar(emp.getEmpId());
+                        break;
+
+                    case 4:
+                        leaveService.viewTeamLeaveBalance(emp.getEmpId());
+                        break;
+
+                    case 5:
+                        empService.viewMyTeam(emp.getEmpId());
+                        break;
+
+                    case 6:
+                        return;
+
+                    default:
+                        System.out.println("Invalid choice");
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+}

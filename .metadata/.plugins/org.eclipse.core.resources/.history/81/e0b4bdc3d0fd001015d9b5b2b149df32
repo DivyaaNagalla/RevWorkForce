@@ -1,0 +1,26 @@
+package com.revworkforce.service;
+
+import com.revworkforce.dao.AdminConfigDAO;
+
+public class AdminConfigService {
+
+	private AdminConfigDAO dao;
+
+    // 🔹 Default constructor (normal flow)
+    public AdminConfigService() {
+        this.dao = new AdminConfigDAO();
+    }
+
+    // 🔹 Constructor for Unit Testing (Mockito)
+    public AdminConfigService(AdminConfigDAO dao) {
+        this.dao = dao;
+    }
+
+    public void addDepartment(String name) throws Exception {
+        dao.addDepartment(name);
+    }
+
+    public void addDesignation(String name) throws Exception {
+        dao.addDesignation(name);
+    }
+}

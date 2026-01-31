@@ -1,0 +1,130 @@
+package com.revworkforce.dao;
+
+import java.sql.*;
+import com.revworkforce.util.DBUtil;
+
+public class PerformanceDAO {
+
+    public void createReview(int empId,
+                             int year,
+                             String deliverables,
+                             String achievements,
+                             String improvements,
+                             int selfRating) throws Exception {
+
+        String sql =
+            "INSERT INTO PERFORMANCE_REVIEW " +
+            "(REVIEW_ID, EMP_ID, REVIEW_YEAR, KEY_DELIVERABLES, " +
+            "MAJOR_ACCOMPLISHMENTS, AREAS_OF_IMPROVEMENT, SELF_RATING) " +
+            "VALUES (REVIEW_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, empId);
+        ps.setInt(2, year);
+        ps.setString(3, deliverables);
+        ps.setString(4, achievements);
+        ps.setString(5, improvements);
+        ps.setInt(6, selfRating);
+        ps.executeUpdate();
+    }
+
+    public int getLatestReviewId(int empId) throws Exception {
+
+        String sql =
+            "SELECT MAX(REVIEW_ID) FROM PERFORMANCE_REVIEW WHERE EMP_ID=?";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, empId);
+
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return rs.getInt(1);
+    }
+
+   
+    public void createGoal(int reviewId,
+                           String desc,
+                           Date deadline,
+                           String priority,
+                           String metrics) throws Exception {
+
+        String sql =
+            "INSERT INTO GOALS " +
+            "(GOAL_ID, REVIEW_ID, DESCRIPTION, DEADLINE, PRIORITY, SUCCESS_METRICS, PROGRESS, STATUS) " +
+            "VALUES (GOAL_SEQ.NEXTVAL, ?, ?, ?, ?, ?, 0, 'IN_PROGRESS')";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, reviewId);
+        ps.setString(2, desc);
+        ps.setDate(3, deadline);
+        ps.setString(4, priority);
+        ps.setString(5, metrics);
+        ps.executeUpdate();
+    }
+
+    public void viewMyGoals(int empId) throws Exception {
+
+        String sql =
+            "SELECT G.GOAL_ID, G.DESCRIPTION, G.PROGRESS, G.STATUS " +
+            "FROM GOALS G JOIN PERFORMANCE_REVIEW R " +
+            "ON G.REVIEW_ID = R.REVIEW_ID " +
+            "WHERE R.EMP_ID = ?";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, empId);
+
+        ResultSet rs = ps.executeQuery();
+        System.out.println("\n--- My Goals ---");
+
+        while (rs.next()) {
+            System.out.println(
+                rs.getInt("GOAL_ID") + " | " +
+                rs.getString("DESCRIPTION") + " | " +
+                rs.getInt("PROGRESS") + "% | " +
+                rs.getString("STATUS")
+            );
+        }
+    }
+
+    public void updateGoalProgress(int goalId, int progress) throws Exception {
+
+        String status = (progress == 100) ? "COMPLETED" : "IN_PROGRESS";
+
+        String sql =
+            "UPDATE GOALS SET PROGRESS=?, STATUS=? WHERE GOAL_ID=?";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, progress);
+        ps.setString(2, status);
+        ps.setInt(3, goalId);
+        ps.executeUpdate();
+    }
+
+   
+    public void viewManagerFeedback(int empId) throws Exception {
+
+        String sql =
+            "SELECT REVIEW_YEAR, MANAGER_RATING, MANAGER_FEEDBACK " +
+            "FROM PERFORMANCE_REVIEW WHERE EMP_ID=?";
+
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ps.setInt(1, empId);
+
+        ResultSet rs = ps.executeQuery();
+        System.out.println("\n--- Manager Feedback ---");
+
+        while (rs.next()) {
+            System.out.println(
+                "Year: " + rs.getInt("REVIEW_YEAR") +
+                ", Rating: " + rs.getInt("MANAGER_RATING") +
+                ", Feedback: " + rs.getString("MANAGER_FEEDBACK")
+            );
+        }
+        createReview(...)
+        viewMyReviews(int empId)
+        viewTeamReviews(int managerId)
+        giveManagerFeedback(int reviewId, int rating, String feedback)
+
+    }
+    
+}

@@ -1,0 +1,20 @@
+package com.revworkforce.service;
+
+import com.revworkforce.dao.LeaveAdminDAO;
+
+public class LeaveAdminService {
+
+    private LeaveAdminDAO dao = new LeaveAdminDAO();
+
+    public void addLeaveType(String name, int quota) throws Exception {
+        dao.addLeaveType(name, quota);
+    }
+
+    public void assignLeaveQuota(int empId, int typeId, int days) throws Exception {
+        dao.assignLeaveQuota(empId, typeId, days);
+    }
+
+    public void adjustLeaveBalance(int empId, int typeId, int balance) throws Exception {
+        dao.adjustLeaveBalance(empId, typeId, balance);
+    }
+}
