@@ -462,4 +462,89 @@ public class EmployeeDAO {
         }
     }
 
+
+    public void viewDepartments() throws Exception {
+
+        String sql = "SELECT DEPT_ID, DEPT_NAME FROM DEPARTMENT";
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        System.out.println("\n--- Departments ---");
+
+        boolean found = false;
+        while (rs.next()) {
+            found = true;
+            System.out.println(
+                rs.getInt("DEPT_ID") + " | " +
+                rs.getString("DEPT_NAME")
+            );
+        }
+
+        if (!found)
+            System.out.println("No departments found");
+    }
+    public void viewAllDepartments() throws Exception {
+
+        String sql =
+            "SELECT DEPT_ID, DEPT_NAME " +
+            "FROM DEPARTMENT " +
+            "ORDER BY DEPT_ID";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ResultSet rs = ps.executeQuery();
+
+        System.out.println("\n--- Departments ---");
+        while (rs.next()) {
+            System.out.println(
+                rs.getInt("DEPT_ID") + " | " +
+                rs.getString("DEPT_NAME")
+            );
+        }
+    }
+
+
+    public void viewDesignations() throws Exception {
+
+        String sql = "SELECT DESIG_ID, DESIG_NAME FROM DESIGNATION";
+        PreparedStatement ps = DBUtil.getConnection().prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        System.out.println("\n--- Designations ---");
+
+        boolean found = false;
+        while (rs.next()) {
+            found = true;
+            System.out.println(
+                rs.getInt("DESIG_ID") + " | " +
+                rs.getString("DESIG_NAME")
+            );
+        }
+
+        if (!found)
+            System.out.println("No designations found");
+    }
+
+    public void viewAllDesignations() throws Exception {
+
+        String sql =
+            "SELECT DESIG_ID, DESIG_NAME " +
+            "FROM DESIGNATION " +
+            "ORDER BY DESIG_ID";
+
+        PreparedStatement ps =
+            DBUtil.getConnection().prepareStatement(sql);
+
+        ResultSet rs = ps.executeQuery();
+
+        System.out.println("\n--- Designations ---");
+        while (rs.next()) {
+            System.out.println(
+                rs.getInt("DESIG_ID") + " | " +
+                rs.getString("DESIG_NAME")
+            );
+        }
+    }
+
 }

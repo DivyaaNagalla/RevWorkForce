@@ -61,26 +61,33 @@ public class AdminMenuUI {
 
                         service.assignManager(empId, mgrId);
                         break;
-
                     case 3:
                         System.out.print("Employee ID : ");
-                        int eId = sc.nextInt();
+                         empId = sc.nextInt();
+
+                        service.viewDepartments();  
 
                         System.out.print("Department ID : ");
                         int deptId = sc.nextInt();
 
-                        service.assignDepartment(eId, deptId);
+                        service.assignDepartment(empId, deptId);
+                        System.out.println("Department assigned successfully");
                         break;
+
 
                     case 4:
                         System.out.print("Employee ID : ");
-                        int emp = sc.nextInt();
+                        empId = sc.nextInt();
+
+                        service.viewDesignations();  
 
                         System.out.print("Designation ID : ");
                         int desigId = sc.nextInt();
 
-                        service.assignDesignation(emp, desigId);
+                        service.assignDesignation(empId, desigId);
+                        System.out.println("Designation assigned successfully");
                         break;
+
 
                     case 5:
                         service.viewAllManagers();

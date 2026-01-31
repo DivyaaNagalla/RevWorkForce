@@ -173,5 +173,12 @@ public class EmployeeService {
     public void viewAllManagers() throws Exception {
         dao.viewAllManagers();
     }
+    public void viewDepartments() throws Exception {
+        dao.viewAllDepartments();
+    }
+
+    public void viewDesignations() throws Exception {
+        dao.viewAllDesignations();
+    }
 
 }
