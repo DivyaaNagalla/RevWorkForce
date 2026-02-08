@@ -1,9 +1,0 @@
-package com.revworkforce.main;
-
-public class RevWorkForceApp {
-
-    public static void main(String[] args) {
-        System.out.println("Rev Workforce Application Started");
-    }
-}
-
